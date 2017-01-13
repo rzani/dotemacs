@@ -54,7 +54,7 @@
     ("4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" default)))
  '(package-selected-packages
    (quote
-    (magit linum-relative helm-ag ag helm-projectile projectile rainbow-delimiters smartparens auto-complete avy org-bullets which-key try evil-leader evil helm use-package))))
+    (flycheck web-mode magit linum-relative helm-ag ag helm-projectile projectile rainbow-delimiters smartparens auto-complete avy org-bullets which-key try evil-leader evil helm use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

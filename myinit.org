@@ -55,7 +55,7 @@
 
     (defun insert-line-before (times)
       "Insert a newline(s) above the line containing the cursor.
-    You might insert multiple lines using TIMES."
+        You might insert multiple lines using TIMES."
       (interactive "p")
       (save-excursion
         (move-beginning-of-line 1)
@@ -63,7 +63,7 @@
 
     (defun insert-line-after (times)
       "Insert a newline(s) below the line containing the cursor.
-    You might insert multiple lines using TIMES."
+        You might insert multiple lines using TIMES."
       (interactive "p")
       (save-excursion
         (move-end-of-line 1)
@@ -95,7 +95,7 @@
 
     (defun switch-to-previous-buffer ()
       "Switch to previously open buffer.
-    Repeated invocations toggle between the two most recently open buffers."
+        Repeated invocations toggle between the two most recently open buffers."
       (interactive)
       (switch-to-buffer (other-buffer (current-buffer) 1)))
 
@@ -115,13 +115,20 @@
 
     (defun minibuffer-keyboard-quit ()
       "Abort recursive edit.
-    In Delete Selection mode, if the mark is active, just deactivate it;
-    then it takes a second \\[keyboard-quit] to abort the minibuffer."
+        In Delete Selection mode, if the mark is active, just deactivate it;
+        then it takes a second \\[keyboard-quit] to abort the minibuffer."
       (interactive)
       (if (and delete-selection-mode transient-mark-mode mark-active)
           (setq deactivate-mark  t)
         (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
         (abort-recursive-edit)))
+    (defun toggle-php-flavor-mode ()
+      (interactive)
+      "Toggle mode between PHP & Web-Mode Helper modes"
+      (cond ((string= mode-name "PHP")
+             (web-mode))
+            ((string= mode-name "Web")
+             (php-mode))))
 
 
   #+END_SRC
@@ -318,31 +325,70 @@
 
 * Parens
   #+BEGIN_SRC emacs-lisp
-    (use-package smartparens
-      :ensure t
-      :config
-      (progn
-        (require 'smartparens-config)
-        (smartparens-global-mode 1)))
+        (use-package smartparens
+          :ensure t)
 
-     (use-package rainbow-delimiters
-      :ensure t
-      :defer t
-      :init
-      (progn
-        (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)))
+         (use-package rainbow-delimiters
+          :ensure t)
   #+END_SRC
 
 * Editorconfig (soon)
-* Magit (soon)
+* Magit
   #+BEGIN_SRC emacs-lisp
     (use-package magit
       :ensure t
-      :bind (("C-c m" . magit-status))
-      ) 
+      :bind (("C-c m" . magit-status))) 
   #+END_SRC
 
-* Langagues (soon)
+* Flycheck
+  #+BEGIN_SRC emacs-lisp
+    (use-package flycheck
+      :ensure t)  
+  #+END_SRC
+
+* Langagues
+  #+BEGIN_SRC emacs-lisp
+    (use-package web-mode
+      :ensure t) 
+
+    (setq web-mode-engines-alist
+          '( ("blade"  . "\\.blade\\.")))
+
+    (setq web-mode-ac-sources-alist
+          '(("php" . (ac-source-yasnippet ac-source-php-auto-yasnippets))
+            ("html" . (ac-source-emmet-html-aliases ac-source-emmet-html-snippets))
+            ("css" . (ac-source-css-property ac-source-emmet-css-snippets))))
+
+  #+END_SRC
+
+** LISP
+   #+BEGIN_SRC emacs-lisp
+     (defun rzani/lisp-mode-hook ()
+       (smartparens-mode t)
+       (rainbow-delimiters-mode t))
+
+     (add-hook 'emacs-lisp-mode-hook 'rzani/lisp-mode-hook)
+   #+END_SRC
+
+** PHP
+   #+BEGIN_SRC emacs-lisp
+     (defun rzani/php-config ()
+       (web-mode)
+       (flycheck-mode)
+       
+       ;; make these variables local
+       (make-local-variable 'web-mode-code-indent-offset)
+       (make-local-variable 'web-mode-markup-indent-offset)
+       (make-local-variable 'web-mode-css-indent-offset)
+
+       ;; set indentation, can set different indentation level for different code type
+       (setq web-mode-code-indent-offset 4)
+       (setq web-mode-css-indent-offset 2)
+       (setq web-mode-markup-indent-offset 2))
+
+     (add-to-list 'auto-mode-alist '("\\.php$" . rzani/php-config))
+   #+END_SRC
+
 * Themes
   #+BEGIN_SRC emacs-lisp
     (defun reapply-themes ()
