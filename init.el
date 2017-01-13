@@ -29,6 +29,20 @@
 
 (org-babel-load-file (expand-file-name "~/.emacs.d/myinit.org"))
 
+;; change mode-line color by evil state
+(lexical-let ((default-color (cons (face-background 'mode-line)
+				   (face-foreground 'mode-line))))
+  (add-hook 'post-command-hook
+	    (lambda ()
+	      (let ((color (cond ((minibufferp) default-color)
+				 ((evil-insert-state-p) '("#ffc107" . "#ffffff"))
+				 ((evil-visual-state-p) '("#9c27b0" . "#ffffff"))
+				 ((evil-emacs-state-p)  '("#444488" . "#ffffff"))
+				 ((buffer-modified-p)   '("#2196f3" . "#ffffff"))
+				 (t default-color))))
+		(set-face-background 'mode-line (car color))
+		(set-face-foreground 'mode-line (cdr color))))))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
