@@ -232,11 +232,17 @@
             (evil-leader/set-leader ",")
             (setq evil-leader/in-all-states t)
 
+            ;; evil-nerd-commenter
+            (use-package evil-nerd-commenter 
+              :ensure t
+              )
+
             (evil-leader/set-key
               "."   'mode-line-other-buffer
               "1"   'delete-other-windows
               "_"   'split-window-below
               "|"   'split-window-right
+              "ci" 'evilnc-comment-or-uncomment-lines
               "e"   'helm-find-files
               "f"   'helm-projectile-ag
               "p"   'insert-register
@@ -246,6 +252,7 @@
               )))
 
         (evil-mode 1))
+
       :config
       (progn
         
@@ -346,6 +353,18 @@
       :ensure t)  
   #+END_SRC
 
+* Emmet
+  #+BEGIN_SRC emacs-lisp
+    (use-package emmet-mode
+      :ensure t
+      :config
+      (progn
+        (add-hook 'sgml-mode-hook 'emmet-mode)
+        (add-hook 'css-mode-hook 'emmet-mode)
+	    (add-hook 'web-mode-hook 'emmet-mode))
+      ) 
+  #+END_SRC
+
 * Langagues
   #+BEGIN_SRC emacs-lisp
     (use-package web-mode
@@ -360,6 +379,14 @@
             ("css" . (ac-source-css-property ac-source-emmet-css-snippets))))
 
   #+END_SRC
+
+** Editor Config
+   #+BEGIN_SRC emacs-lisp
+     (use-package editorconfig
+       :ensure t
+       :config
+       (editorconfig-mode 1))
+   #+END_SRC
 
 ** LISP
    #+BEGIN_SRC emacs-lisp
@@ -389,14 +416,27 @@
      (add-to-list 'auto-mode-alist '("\\.php$" . rzani/php-config))
    #+END_SRC
 
+** YML
+  #+BEGIN_SRC emacs-lisp
+    (use-package yaml-mode
+      :ensure t)
+  #+END_SRC 
+
+** Nginx
+   #+BEGIN_SRC emacs-lisp
+     (use-package nginx-mode
+       :ensure t)
+   #+END_SRC
+
+
 * Themes
   #+BEGIN_SRC emacs-lisp
-    (defun reapply-themes ()
-      "Forcibly load the themes listed in `custom-enabled-themes'."
-      (dolist (theme custom-enabled-themes)
-        (unless (custom-theme-p theme)
-          (load-theme theme)))
-      (custom-set-variables `(custom-enabled-themes (quote ,custom-enabled-themes))))
+    ;;(defun reapply-themes ()
+    ;;  "Forcibly load the themes listed in `custom-enabled-themes'."
+    ;;  (dolist (theme custom-enabled-themes)
+    ;;    (unless (custom-theme-p theme)
+    ;;      (load-theme theme)))
+    ;;  (custom-set-variables `(custom-enabled-themes (quote ,custom-enabled-themes))))
 
     (defun light ()
       "Activate a light color theme."
@@ -409,6 +449,11 @@
       (color-theme-sanityinc-solarized-dark))
 
     (use-package color-theme-sanityinc-solarized
-      :ensure t
-      :config (add-hook 'after-init-hook 'reapply-themes))
+      :ensure t)
+
+    (use-package solarized-theme
+      :ensure t)
+
+    ;; (add-hook 'after-init-hook 'reapply-themes)
+
   #+END_SRC
