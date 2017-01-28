@@ -1,5 +1,5 @@
 #+STARTIP: overview
-* Functions
+* :metal: Functions
   #+BEGIN_SRC emacs-lisp
     (defun split-window-func-with-other-buffer (split-function)
       "When splitting windows, show (other-buffer) in the new window"
@@ -134,7 +134,7 @@
 
   #+END_SRC
   
-* Interface tweaks
+* :ok_hand: Interface tweaks
 ** Utility
     #+BEGIN_SRC emacs-lisp
       (fset 'yes-or-no-p 'y-or-n-p)
@@ -176,7 +176,7 @@
        :config (add-hook 'after-init-hook #'global-emojify-mode))   
    #+END_SRC
 
-* IDO
+* :eyeglasses: IDO
   #+BEGIN_SRC emacs-lisp
     (setq indo-enable-flex-matching t)  
     (setq ido-everywhere t)
@@ -186,7 +186,7 @@
     ;;(defalias 'list-buffers 'ibuffer-other-window)
   #+END_SRC
 
-* Swiper & Counsel :mag: 
+* :fox: Swiper & Counsel
   #+BEGIN_SRC emacs-lisp
     (use-package smex
       :ensure t)
@@ -209,7 +209,7 @@
         ))  
   #+END_SRC
 
-* AG :mag_right: 
+* :mag_right: AG
   #+BEGIN_SRC emacs-lisp
     (defun set-exec-path-from-shell-PATH ()
       "Set up Emacs' `exec-path' and PATH environment variable to match that used by the user's shell.
@@ -227,14 +227,14 @@
       :config (setq ag-executable "/usr/local/bin/ag"))
   #+END_SRC
 
-* Projectile :file_folder: 
+* :file_folder: Projectile
   #+BEGIN_SRC emacs-lisp
     (use-package projectile
       :ensure t
       :config (projectile-global-mode))
   #+END_SRC
   
-* Evil-mode :smiling_imp: 
+* :smiling_imp: Evil-mode 
   #+BEGIN_SRC emacs-lisp
     (use-package evil
       :ensure t
@@ -293,7 +293,7 @@
         ))
   #+END_SRC
 
-* Linum :straight_ruler: 
+* :straight_ruler: Linum
   #+BEGIN_SRC emacs-lisp
     (use-package linum-relative
       :ensure t
@@ -307,20 +307,20 @@
       ))
   #+END_SRC
   
-* Try
+* :dart: Try
   #+BEGIN_SRC emacs-lisp
     (use-package try
       :ensure t)
   #+END_SRC
   
-* Which-key :key: 
+* :key: Which-key
   #+BEGIN_SRC emacs-lisp
     (use-package which-key
       :ensure t
       :config (which-key-mode))
   #+END_SRC
   
-* Org-mode :calendar: 
+* :date: Org-mode
 ** org-bullets
    #+BEGIN_SRC emacs-lisp
      (use-package org-bullets
@@ -329,13 +329,13 @@
        (add-hook 'org-mode-hook (lambda() (org-bullets-mode 1))))
    #+END_SRC
 
-* Jumping around with AVY
+* :rabbit: Jumping around with AVY
   #+BEGIN_SRC emacs-lisp
     (use-package avy
       :ensure t)
   #+END_SRC
 
-* Auto-Complete
+* :book: Auto-Complete
   #+BEGIN_SRC emacs-lisp
     (use-package auto-complete
       :ensure t
@@ -346,7 +346,7 @@
         ))
   #+END_SRC
 
-* Parens
+* :family: Parens
   #+BEGIN_SRC emacs-lisp
         (use-package smartparens
           :ensure t)
@@ -355,20 +355,20 @@
           :ensure t)
   #+END_SRC
 
-* Magit
+* :eyes: Magit
   #+BEGIN_SRC emacs-lisp
     (use-package magit
       :ensure t
       :bind (("C-c m" . magit-status))) 
   #+END_SRC
   
-* Flycheck
+* :heavy_check_mark: Flycheck
   #+BEGIN_SRC emacs-lisp
     (use-package flycheck
       :ensure t)  
   #+END_SRC
 
-* Emmet
+* :triangular_ruler: Emmet
   #+BEGIN_SRC emacs-lisp
     (use-package emmet-mode
       :ensure t
@@ -380,7 +380,7 @@
       ) 
   #+END_SRC
 
-* Themes
+* :rose: Themes
   #+BEGIN_SRC emacs-lisp
     ;;(defun reapply-themes ()
     ;;  "Forcibly load the themes listed in `custom-enabled-themes'."
@@ -408,7 +408,7 @@
     ;; (add-hook 'after-init-hook 'reapply-themes)
 
   #+END_SRC
-* Langagues
+* :tongue: Langagues
   #+BEGIN_SRC emacs-lisp
     (use-package web-mode
       :ensure t) 
