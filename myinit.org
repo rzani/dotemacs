@@ -169,7 +169,14 @@
       (set-frame-font "Fira Mono for Powerline 13")   ; Change default font
     #+END_SRC
 
-* IDO 
+** Emojis
+   #+BEGIN_SRC emacs-lisp
+     (use-package emojify
+       :ensure t
+       :config (add-hook 'after-init-hook #'global-emojify-mode))   
+   #+END_SRC
+
+* IDO
   #+BEGIN_SRC emacs-lisp
     (setq indo-enable-flex-matching t)  
     (setq ido-everywhere t)
@@ -179,7 +186,7 @@
     ;;(defalias 'list-buffers 'ibuffer-other-window)
   #+END_SRC
 
-* Swiper & Counsel
+* Swiper & Counsel :mag: 
   #+BEGIN_SRC emacs-lisp
     (use-package smex
       :ensure t)
@@ -202,7 +209,7 @@
         ))  
   #+END_SRC
 
-* AG
+* AG :mag_right: 
   #+BEGIN_SRC emacs-lisp
     (defun set-exec-path-from-shell-PATH ()
       "Set up Emacs' `exec-path' and PATH environment variable to match that used by the user's shell.
@@ -220,14 +227,14 @@
       :config (setq ag-executable "/usr/local/bin/ag"))
   #+END_SRC
 
-* Projectile
+* Projectile :file_folder: 
   #+BEGIN_SRC emacs-lisp
     (use-package projectile
       :ensure t
       :config (projectile-global-mode))
   #+END_SRC
   
-* Evil-mode
+* Evil-mode :smiling_imp: 
   #+BEGIN_SRC emacs-lisp
     (use-package evil
       :ensure t
@@ -286,7 +293,7 @@
         ))
   #+END_SRC
 
-* Linum
+* Linum :straight_ruler: 
   #+BEGIN_SRC emacs-lisp
     (use-package linum-relative
       :ensure t
@@ -299,21 +306,21 @@
          '(linum-relative-current-face ((t (:foreground "#a89984" :weight bold)))))
       ))
   #+END_SRC
-
+  
 * Try
   #+BEGIN_SRC emacs-lisp
     (use-package try
       :ensure t)
   #+END_SRC
   
-* Which-key
+* Which-key :key: 
   #+BEGIN_SRC emacs-lisp
     (use-package which-key
       :ensure t
       :config (which-key-mode))
   #+END_SRC
-
-* Org-mode
+  
+* Org-mode :calendar: 
 ** org-bullets
    #+BEGIN_SRC emacs-lisp
      (use-package org-bullets
@@ -348,14 +355,13 @@
           :ensure t)
   #+END_SRC
 
-* Editorconfig (soon)
 * Magit
   #+BEGIN_SRC emacs-lisp
     (use-package magit
       :ensure t
       :bind (("C-c m" . magit-status))) 
   #+END_SRC
-
+  
 * Flycheck
   #+BEGIN_SRC emacs-lisp
     (use-package flycheck
@@ -464,4 +470,3 @@
      (use-package nginx-mode
        :ensure t)
    #+END_SRC
-
