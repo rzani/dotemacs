@@ -26,6 +26,11 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
+(eval-when-compile
+  (require 'use-package))
+(require 'diminish)
+(require 'bind-key)
+
 (org-babel-load-file (expand-file-name "~/.emacs.d/myinit.org"))
 
 ;; change mode-line color by evil state
@@ -52,7 +57,7 @@
     ("d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" default)))
  '(package-selected-packages
    (quote
-    (emojify smex counsel swiper evil-nerd-commenter atom-one-dark-theme emmet-mode php-mode dot-mode solarized-theme yaml-mode which-key web-mode use-package try smartparens rainbow-delimiters org-bullets nginx-mode magit linum-relative helm-projectile helm-ag flycheck evil-leader editorconfig color-theme-sanityinc-solarized avy auto-complete ag))))
+    (evil-matchit evil-surround dashboard emojify smex counsel swiper evil-nerd-commenter atom-one-dark-theme emmet-mode php-mode dot-mode solarized-theme yaml-mode which-key web-mode use-package try smartparens rainbow-delimiters org-bullets nginx-mode magit linum-relative helm-projectile helm-ag flycheck evil-leader editorconfig color-theme-sanityinc-solarized avy auto-complete ag))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
