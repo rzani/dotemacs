@@ -287,6 +287,11 @@
           :ensure t
           :config (global-evil-matchit-mode 1))
 
+        ;; evil-mc  
+        (use-package evil-mc
+          :ensure t
+          :config (global-evil-mc-mode  1))
+
         ;; evil-leader
         (use-package evil-leader
           :ensure t
@@ -338,6 +343,9 @@
 
         ))
   #+END_SRC
+
+  #+RESULTS:
+  : t
 
 * :straight_ruler: Linum
   #+BEGIN_SRC emacs-lisp
