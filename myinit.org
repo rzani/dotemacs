@@ -141,6 +141,12 @@
       (global-hl-line-mode)
     #+END_SRC
 
+** Backup
+   #+BEGIN_SRC emacs-lisp
+     (defvar backup-dir "~/.emacs.d/backups/")
+     (setq backup-directory-alist (list (cons "." backup-dir)))
+     (setq make-backup-files nil)
+   #+END_SRC
 ** Frame
     #+BEGIN_SRC emacs-lisp
       (setq inhit-startup-message t)
