@@ -6,6 +6,19 @@
       (global-hl-line-mode)
     #+END_SRC
 
+** Spaceline
+   #+BEGIN_SRC emacs-lisp
+     (use-package spaceline
+       :ensure t
+       :config (progn 
+           (require 'spaceline-config)
+           (spaceline-spacemacs-theme)))
+
+     (setq ns-use-srgb-colorspace nil)
+   #+END_SRC
+
+   #+RESULTS:
+
 ** Backup
    #+BEGIN_SRC emacs-lisp
      (defvar backup-dir "~/.emacs.d/backups/")
@@ -74,9 +87,19 @@
     (use-package solarized-theme
       :ensure t)
 
+    (use-package atom-one-dark-theme
+      :ensure t)
+
+    (use-package flatui-theme
+      :ensure t)
+
     ;; (add-hook 'after-init-hook 'reapply-themes)
 
   #+END_SRC
+
+  #+RESULTS:
+  : t
+
 * :eyeglasses: IDO
   #+BEGIN_SRC emacs-lisp
     (setq ido-everywhere t)
@@ -198,6 +221,7 @@
               "1"   'delete-other-windows
               "_"   'split-window-below
               "|"   'split-window-right
+              "b"   'buffer-menu
               "e"   'counsel-find-file
               "f"   'counsel-ag
               "ci"  'evilnc-comment-or-uncomment-lines
@@ -228,9 +252,6 @@
 
         ))
   #+END_SRC
-
-  #+RESULTS:
-  : t
 
 * :straight_ruler: Linum
   #+BEGIN_SRC emacs-lisp
@@ -324,6 +345,7 @@
    #+BEGIN_SRC emacs-lisp
      (use-package editorconfig
        :ensure t
+       :diminish (editorconfig-mode . "editorconfig")
        :config (editorconfig-mode 1))
    #+END_SRC
 
@@ -375,6 +397,12 @@
     (use-package yaml-mode
       :ensure t)
   #+END_SRC 
+
+** Dockerfile
+   #+BEGIN_SRC emacs-lisp
+     (use-package dockerfile-mode
+       :ensure t) 
+   #+END_SRC
 
 ** Nginx
    #+BEGIN_SRC emacs-lisp

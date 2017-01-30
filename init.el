@@ -1,5 +1,7 @@
 ;; @author rzani <rodrigo.zhs@gmail.com>
 
+(setq ns-pop-up-frames nil)
+
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
 (require 'check-version)
