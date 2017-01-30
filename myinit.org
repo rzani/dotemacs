@@ -79,9 +79,12 @@
   #+END_SRC
 * :eyeglasses: IDO
   #+BEGIN_SRC emacs-lisp
-    (setq indo-enable-flex-matching t)  
     (setq ido-everywhere t)
     (ido-mode 1)
+
+    (use-package ido-ubiquitous
+      :ensure t
+      :config (ido-ubiquitous-mode 1))
 
     (defalias 'list-buffers 'ibuffer)
     ;;(defalias 'list-buffers 'ibuffer-other-window)
@@ -105,8 +108,13 @@
         (ivy-mode 1)
         (setq ivy-use-virtual-buffers t)
         (setq ivy-count-format "(%d/%d) ")
+
+        (use-package flx
+          :ensure t)
+
         (setq ivy-re-builders-alist
-              '((t . ivy--regex-fuzzy)))
+              '((ivy-switch-buffer . ivy--regex-plus)
+                (t . ivy--regex-fuzzy)))
         ))  
   #+END_SRC
 
@@ -132,9 +140,16 @@
   #+BEGIN_SRC emacs-lisp
     (use-package projectile
       :ensure t
-      :config (projectile-global-mode))
+      :config (progn
+
+                (use-package counsel-projectile
+                  :ensure t
+                  :config (counsel-projectile-on))
+
+                (projectile-global-mode)
+                ))
   #+END_SRC
-  
+
 * :smiling_imp: Evil-mode 
   #+BEGIN_SRC emacs-lisp
     (use-package evil
@@ -175,8 +190,10 @@
               )
 
             (evil-leader/set-key
-              "SPC" 'avy-resume
+              "SPC" 'projectile-find-file
+              "TAB" 'counsel-projectile-switch-to-buffer
               ","   'avy-goto-char-2
+              "<"   'avy-resume
               "."   'mode-line-other-buffer
               "1"   'delete-other-windows
               "_"   'split-window-below
