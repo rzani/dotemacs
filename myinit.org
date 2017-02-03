@@ -17,8 +17,6 @@
      (setq ns-use-srgb-colorspace nil)
    #+END_SRC
 
-   #+RESULTS:
-
 ** Backup
    #+BEGIN_SRC emacs-lisp
      (defvar backup-dir "~/.emacs.d/backups/")
@@ -96,9 +94,6 @@
     ;; (add-hook 'after-init-hook 'reapply-themes)
 
   #+END_SRC
-
-  #+RESULTS:
-  : t
 
 * :eyeglasses: IDO
   #+BEGIN_SRC emacs-lisp
@@ -214,7 +209,7 @@
 
             (evil-leader/set-key
               "SPC" 'projectile-find-file
-              "TAB" 'counsel-projectile-switch-to-buffer
+              "TAB" 'switch-to-buffer
               ","   'avy-goto-char-2
               "<"   'avy-resume
               "."   'mode-line-other-buffer
@@ -223,7 +218,7 @@
               "|"   'split-window-right
               "b"   'buffer-menu
               "e"   'counsel-find-file
-              "f"   'counsel-ag
+              "f"   'counsel-projectile-ag
               "ci"  'evilnc-comment-or-uncomment-lines
               "p"   'insert-register
               "q"   'kill-this-buffer
@@ -254,19 +249,19 @@
   #+END_SRC
 
 * :straight_ruler: Linum
-  #+BEGIN_SRC emacs-lisp
-    (use-package linum-relative
-      :ensure t
-      :bind (("<f7>" . linum-mode))
-      :init (progn (global-linum-mode t) (linum-relative-mode t) )
-      :config
-      (progn
-        (linum-mode)
-        (custom-set-faces
-         '(linum-relative-current-face ((t (:foreground "#a89984" :weight bold)))))
-      ))
-  #+END_SRC
-  
+#+BEGIN_SRC emacs-lisp
+(use-package linum-relative
+    :ensure t
+    :bind (("<f7>" . linum-mode))
+    :init (progn (global-linum-mode t) (linum-relative-mode t) )
+    :config
+    (progn
+    (linum-mode)
+    (custom-set-faces
+	'(linum-relative-current-face ((t (:foreground "#a89984" :weight bold)))))
+    ))
+#+END_SRC
+
 * :dart: Try
   #+BEGIN_SRC emacs-lisp
     (use-package try
@@ -277,6 +272,7 @@
   #+BEGIN_SRC emacs-lisp
     (use-package which-key
       :ensure t
+      :diminish (which-key-mode . "which-key")
       :config (which-key-mode))
   #+END_SRC
   
@@ -323,12 +319,6 @@
       ) 
   #+END_SRC
 
-* :heavy_check_mark: Flycheck
-  #+BEGIN_SRC emacs-lisp
-    (use-package flycheck
-      :ensure t)  
-  #+END_SRC
-
 * :book: Auto-Complete
   #+BEGIN_SRC emacs-lisp
     (use-package auto-complete
@@ -341,6 +331,13 @@
   #+END_SRC
 
 * :tongue: Langagues
+** Flycheck
+  #+BEGIN_SRC emacs-lisp
+    (use-package flycheck
+      :ensure t
+      :diminish (flycheck-mode . "fly"))
+  #+END_SRC
+
 ** Editor Config
    #+BEGIN_SRC emacs-lisp
      (use-package editorconfig
@@ -362,6 +359,10 @@
              ("html" . (ac-source-emmet-html-aliases ac-source-emmet-html-snippets))
              ("css" . (ac-source-css-property ac-source-emmet-css-snippets))))
 
+     (add-hook 'web-mode-hook '(lambda()
+                                 (electric-pair-mode -1)
+                                 ))
+
    #+END_SRC
 
 ** LISP
@@ -375,9 +376,25 @@
 
 ** PHP
    #+BEGIN_SRC emacs-lisp
+     (use-package php-mode
+       :ensure t)
+
+     (use-package ac-php
+       :ensure t)
+
+     (add-hook 'php-mode-hook (lambda()
+                                (smartparens-mode 1)
+                                (auto-complete-mode t)
+                                (setq ac-sources  '(ac-source-php ) )
+                                (yas-global-mode 1)
+                                (electric-pair-mode 1)
+                                ))
+
      (defun rzani/php-config ()
-       (web-mode)
-       (flycheck-mode)
+       (php-mode)
+       (eldoc-mode t)
+       (setq auto-fill-function 'do-auto-fill)
+       (add-to-list 'write-file-functions 'delete-trailing-whitespace)
        
        ;; make these variables local
        (make-local-variable 'web-mode-code-indent-offset)
@@ -390,6 +407,9 @@
        (setq web-mode-markup-indent-offset 2))
 
      (add-to-list 'auto-mode-alist '("\\.php$" . rzani/php-config))
+
+     (define-key php-mode-map [f6] 'web-mode)
+     (define-key web-mode-map [f6] 'php-mode)
    #+END_SRC
 
 ** YML
@@ -409,3 +429,4 @@
      (use-package nginx-mode
        :ensure t)
    #+END_SRC
+   
