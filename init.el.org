@@ -10,7 +10,7 @@
 
      (package-initialize)
    #+END_SRC
-   
+
 ** Interface and tweaks
    Always answer y or n
    #+BEGIN_SRC emacs-lisp
@@ -36,7 +36,7 @@
    #+BEGIN_SRC emacs-lisp
      (setq inhibit-startup-message t)
    #+END_SRC
-   
+
    Don't show startup screen
    #+BEGIN_SRC emacs-lisp
      (setq inhibit-startup-screen t)
@@ -68,13 +68,13 @@
      (setq backup-directory-alist (list (cons "." backup-dir)))
      (setq make-backup-files nil)
    #+END_SRC
-   
+
    Start in fullscreen mode
    #+BEGIN_SRC emacs-lisp
      (custom-set-variables
       '(initial-frame-alist (quote ((fullscreen . maximized)))))
    #+END_SRC
-   
+
 ** Custom file
    Set location of custom.el
    #+BEGIN_SRC emacs-lisp
@@ -83,9 +83,9 @@
 
    Load custom file
    #+BEGIN_SRC emacs-lisp
-      (load custom-file 'noerror) 
+      (load custom-file 'noerror)
    #+END_SRC
-   
+
 ** Font
    Use the Fira Mono for Powerline font.
    #+BEGIN_SRC emacs-lisp
@@ -95,16 +95,16 @@
    #+END_SRC
 
 ** Custom files and functions
-   Load files from ~/.emacs.d/lisp 
-   #+BEGIN_SRC 
+   Load files from ~/.emacs.d/lisp
+   #+BEGIN_SRC
      (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
    #+END_SRC
-   
+
    Load functions.el
    #+BEGIN_SRC emacs-lisp
      (require 'functions)
    #+END_SRC
-   
+
    Check emacs version compatibility
    #+BEGIN_SRC emacs-lisp
      ;;(require 'check-version)
@@ -118,7 +118,7 @@
        (interactive)
        (color-theme-sanityinc-solarized-light))
    #+END_SRC
-   
+
    Apply Solarized Dark theme
    #+BEGIN_SRC emacs-lisp
      (defun dark ()
@@ -126,24 +126,24 @@
        (interactive)
        (color-theme-sanityinc-solarized-dark))
    #+END_SRC
-   
+
    Install Solarized from sanityinc
    #+BEGIN_SRC emacs-lisp
     (use-package color-theme-sanityinc-solarized
       :ensure t)
    #+END_SRC
-   
+
    Install Atom One Dark theme
    #+BEGIN_SRC emacs-lisp
      (use-package atom-one-dark-theme
        :ensure t)
    #+END_SRC
-   
+
    Load Theme
    #+BEGIN_SRC emacs-lisp
      (load-theme 'sanityinc-solarized-dark t)
    #+END_SRC
-   
+
 ** Mac OSX
    Make Emacs use the $PATH set up by the user's shell
    #+BEGIN_SRC emacs-lisp
@@ -166,10 +166,10 @@
        :init
        (progn
 
-         ;; Escape with jk keys 
+         ;; Escape with jk keys
          (use-package evil-escape
            :ensure t
-           :config 
+           :config
            (evil-escape-mode)
            (setq-default evil-escape-delay 0.2)
            (setq-default evil-escape-key-sequence "jk"))
@@ -196,7 +196,7 @@
            (global-evil-mc-mode  1))
 
          ;; Nerd Commenter
-         (use-package evil-nerd-commenter 
+         (use-package evil-nerd-commenter
            :ensure t)
 
          ;; Vim leader key ported
@@ -252,7 +252,7 @@
        (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
        (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit))
    #+END_SRC
-   
+
 ** IDO
    Set up IDO everywhere
    #+BEGIN_SRC emacs-lisp
@@ -273,13 +273,13 @@
      (use-package smex
        :ensure t)
    #+END_SRC
-   
+
    Counsel
    #+BEGIN_SRC emacs-lisp
      (use-package counsel
        :ensure t)
    #+END_SRC
-   
+
    [FLX](https://github.com/lewang/flx) - Fuzzy match
    #+BEGIN_SRC emacs-lisp
      (use-package flx
@@ -315,10 +315,10 @@
    #+BEGIN_SRC emacs-lisp
      (use-package projectile
        :ensure t
-       :config 
+       :config
        (projectile-global-mode))
    #+END_SRC
-   
+
    Counsel's Integration
    #+BEGIN_SRC emacs-lisp
      (use-package counsel-projectile
@@ -326,13 +326,13 @@
        :config
        (counsel-projectile-on))
    #+END_SRC
-   
+
 ** AG
    Silver Search
    #+BEGIN_SRC emacs-lisp
      (use-package ag
        :ensure t
-       :config 
+       :config
        (setq ag-executable "/usr/local/bin/ag"))
    #+END_SRC
 
@@ -342,9 +342,9 @@
      (use-package linum-relative
        :ensure t
        :bind (("<f7>" . linum-mode))
-       :init 
+       :init
        (global-linum-mode t)
-       (linum-relative-mode t) 
+       (linum-relative-mode t)
        :config
        (linum-mode)
        (custom-set-faces
@@ -365,7 +365,7 @@
      (use-package smartparens
        :ensure t)
    #+END_SRC
-   
+
    Rainbow delimiters
    #+BEGIN_SRC emacs-lisp
      (use-package rainbow-delimiters
@@ -395,11 +395,12 @@
    #+BEGIN_SRC emacs-lisp
      (use-package flycheck
        :ensure t
-       :diminish (flycheck-mode . "fly"))
+       :diminish (flycheck-mode . "fly")
+       :config (global-flycheck-mode))
    #+END_SRC
 
 ** EditorConfig
-   Define and maintain consistent coding styles 
+   Define and maintain consistent coding styles
    #+BEGIN_SRC emacs-lisp
      (use-package editorconfig
        :ensure t
@@ -414,10 +415,81 @@
        :ensure t)
    #+END_SRC
 
-** PHP
-   php-mode
+** Auto Complete
    #+BEGIN_SRC emacs-lisp
+     (use-package auto-complete
+       :ensure t
+       :diminish (auto-complete-mode . "ac")
+       :init
+       (ac-config-default)
+       (global-auto-complete-mode t))
+   #+END_SRC
 
+** PHP
+   Install php-mode
+   #+BEGIN_SRC emacs-lisp
+     (use-package php-mode
+       :ensure t
+       :config
+       ;; delete trailing whitespace on save
+       (add-to-list 'write-file-functions 'delete-trailing-whitespace)
+
+       ;; make these variables local
+       (make-local-variable 'web-mode-code-indent-offset)
+       (make-local-variable 'web-mode-markup-indent-offset)
+       (make-local-variable 'web-mode-css-indent-offset)
+
+       ;; set indentation, can set different indentation level for different code type
+       (setq web-mode-code-indent-offset 4)
+       (setq web-mode-css-indent-offset 2)
+       (setq web-mode-markup-indent-offset 2))
+   #+END_SRC
+
+   Install auto complete to php-mode
+   #+BEGIN_SRC emacs-lisp
+     (use-package ac-php
+       :ensure t)
+   #+END_SRC
+
+   Minor modes
+   #+BEGIN_SRC emacs-lisp
+     (defun rzani/php-mode-hook()
+       "Configures php-mode"
+       ;; Autocomplete paired brackets
+       (electric-pair-mode 1)
+       ;; Auto complete
+       (auto-complete-mode t)
+       (setq ac-sources '(ac-source-php) )
+       ;; Show vertical indent guide
+       (indent-guide-mode))
+
+     (add-hook 'php-mode-hook 'rzani/php-mode-hook)
+   #+END_SRC
+
+** Web mode
+   Install web-mode
+   #+BEGIN_SRC emacs-lisp
+     (use-package web-mode
+       :ensure t
+       :mode (("\\.html$" . web-mode)
+              ("\\.blade\\.php$" . web-mode))
+       :config
+       (setq web-mode-engines-alist
+             '( ("blade"  . "\\.blade\\.")))
+
+       (setq web-mode-ac-sources-alist
+             '(("php" . (ac-source-yasnippet ac-source-php-auto-yasnippets))
+               ("html" . (ac-source-emmet-html-aliases ac-source-emmet-html-snippets))
+               ("css" . (ac-source-css-property ac-source-emmet-css-snippets)))))
+   #+END_SRC
+
+   Minor modes
+   #+BEGIN_SRC emacs-lisp
+     (defun rzani/web-mode-hook()
+       "Configure web-mode-hook"
+       (electric-pair-mode -1))
+
+     (add-hook 'web-mode-hook 'rzani/web-mode-hook)
    #+END_SRC
 
 ** Org
@@ -441,9 +513,7 @@
        ;; Fancy highlights delimiters
        (rainbow-delimiters-mode)
        ;; Show vertical indent guide
-       (indent-guide-mode)
-       ;; On the fly syntax check
-       (flycheck-mode))
+       (indent-guide-mode))
 
      (add-hook 'emacs-lisp-mode-hook 'rzani/elisp-mode-hook)
    #+END_SRC
@@ -452,9 +522,6 @@
    F5 to refresh buffers
    #+BEGIN_SRC emacs-lisp
      (global-set-key (kbd "<f5>") 'revert-buffer)
+     (global-set-key (kbd "C-,") 'rzani/add-comma-end-of-line)
+     (global-set-key (kbd "C-;") 'rzani/add-semicolon-end-of-line)
    #+END_SRC
-   
-   
-   
-   
-   
