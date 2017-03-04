@@ -1,0 +1,383 @@
+#+STARTUP: content
+* init.el
+** Package Source
+   #+BEGIN_SRC emacs-lisp
+     (require 'package)
+     (setq package-enable-at-startup nil)
+
+     (add-to-list 'package-archives
+		  '("melpa" . "https://melpa.org/packages/"))
+
+     (package-initialize)
+   #+END_SRC
+   
+** Interface and tweaks
+   Always answer y or n
+   #+BEGIN_SRC emacs-lisp
+     (fset 'yes-or-no-p 'y-or-n-p)
+   #+END_SRC
+
+   Set cursor line mode globally
+   #+BEGIN_SRC emacs-lisp
+     (global-hl-line-mode)
+   #+END_SRC
+
+   Hide scroll bar
+   #+BEGIN_SRC emacs-lisp
+     (set-scroll-bar-mode nil)
+   #+END_SRC
+
+   Hide tool bar
+   #+BEGIN_SRC emacs-lisp
+     (tool-bar-mode -1)
+   #+END_SRC
+
+   Don't show startup message
+   #+BEGIN_SRC emacs-lisp
+     (setq inhibit-startup-message t)
+   #+END_SRC
+   
+   Don't show startup screen
+   #+BEGIN_SRC emacs-lisp
+     (setq inhibit-startup-screen t)
+   #+END_SRC
+
+   Don't show startup echo area message
+   #+BEGIN_SRC emacs-lisp
+     (setq inhibit-startup-echo-area-message t)
+   #+END_SRC
+
+   Remove borders
+   #+BEGIN_SRC emacs-lisp
+     (let ((no-border '(internal-border-width . 0)))
+       (add-to-list 'default-frame-alist no-border)
+       (add-to-list 'initial-frame-alist no-border))
+   #+END_SRC
+
+   Abbreviate buffer filename
+   #+BEGIN_SRC emacs-lisp
+     (setq frame-title-format
+	   '((:eval (if (buffer-file-name)
+			(abbreviate-file-name (buffer-file-name))
+		      "%b"))))
+   #+END_SRC
+
+   Setup backup's file folder
+   #+BEGIN_SRC emacs-lisp
+     (defvar backup-dir "~/.emacs.d/backups/")
+     (setq backup-directory-alist (list (cons "." backup-dir)))
+     (setq make-backup-files nil)
+   #+END_SRC
+   
+   Start in fullscreen mode
+   #+BEGIN_SRC emacs-lisp
+     (custom-set-variables
+      '(initial-frame-alist (quote ((fullscreen . maximized)))))
+   #+END_SRC
+   
+** Custom file
+   Set location of custom.el
+   #+BEGIN_SRC emacs-lisp
+      (setq custom-file (expand-file-name "~/.emacs.d/custom.el"))
+   #+END_SRC
+
+   Load custom file
+   #+BEGIN_SRC emacs-lisp
+      (load custom-file 'noerror) 
+   #+END_SRC
+   
+** Font
+   Use the Fira Mono for Powerline font.
+   #+BEGIN_SRC emacs-lisp
+      (add-to-list 'default-frame-alist '(font . "fira mono for powerline 12" ))
+      (set-face-attribute 'default t :font "fira mono for powerline 12" )
+      (set-frame-font "fira mono for powerline 12")'
+   #+END_SRC
+
+** Custom files and functions
+   Load files from ~/.emacs.d/lisp 
+   #+BEGIN_SRC 
+     (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+   #+END_SRC
+   
+   Load functions.el
+   #+BEGIN_SRC emacs-lisp
+     (require 'functions)
+   #+END_SRC
+   
+   Check emacs version compatibility
+   #+BEGIN_SRC emacs-lisp
+     ;;(require 'check-version)
+   #+END_SRC
+
+** Themes
+   Apply Solarized Light theme
+   #+BEGIN_SRC emacs-lisp
+     (defun light ()
+       "Activate a light color theme."
+       (interactive)
+       (color-theme-sanityinc-solarized-light))
+   #+END_SRC
+   
+   Apply Solarized Dark theme
+   #+BEGIN_SRC emacs-lisp
+     (defun dark ()
+       "Activate a dark color theme."
+       (interactive)
+       (color-theme-sanityinc-solarized-dark))
+   #+END_SRC
+   
+   Install Solarized from sanityinc
+   #+BEGIN_SRC emacs-lisp
+    (use-package color-theme-sanityinc-solarized
+      :ensure t)
+   #+END_SRC
+   
+   Install Atom One Dark theme
+   #+BEGIN_SRC emacs-lisp
+     (use-package atom-one-dark-theme
+       :ensure t)
+   #+END_SRC
+   
+   Load Theme
+   #+BEGIN_SRC emacs-lisp
+     (load-theme 'sanityinc-solarized-dark t)
+   #+END_SRC
+   
+** Mac OSX
+   Make Emacs use the $PATH set up by the user's shell
+   #+BEGIN_SRC emacs-lisp
+     (use-package exec-path-from-shell
+       :ensure t
+       :init (exec-path-from-shell-initialize))
+   #+END_SRC
+
+** Try
+   Try packages and don't mess around
+   #+BEGIN_SRC emacs-lisp
+     (use-package try
+       :ensure t)
+   #+END_SRC
+
+** Evil - Extensible VI Layer
+   #+BEGIN_SRC emacs-lisp
+     (use-package evil
+       :ensure t
+       :init
+       (progn
+
+         ;; Escape with jk keys 
+         (use-package evil-escape
+           :ensure t
+           :config 
+           (evil-escape-mode)
+           (setq-default evil-escape-delay 0.2)
+           (setq-default evil-escape-key-sequence "jk"))
+
+         ;; Surround around
+         (use-package evil-surround
+           :ensure t
+           :config
+           (global-evil-surround-mode 1))
+
+         ;; Press “%” to jump between matched tags
+         (use-package evil-matchit
+           :ensure t
+           :config
+           (global-evil-matchit-mode 1))
+
+         ;; Multi-cursors
+         ;; C-n (evil-mc-make-and-goto-next-match)
+         ;; C-p (evil-mc-make-and-goto-prev-match)
+         ;; C-t (evil-mc-skip-and-goto-next-match)
+         (use-package evil-mc
+           :ensure t
+           :config
+           (global-evil-mc-mode  1))
+
+         ;; Nerd Commenter
+         (use-package evil-nerd-commenter 
+           :ensure t)
+
+         ;; Vim leader key ported
+         (use-package evil-leader
+           :ensure t
+           :init (global-evil-leader-mode)
+           :config
+           (evil-leader/set-leader ",")
+           (setq evil-leader/in-all-states t)
+
+           (evil-leader/set-key
+             "SPC" 'projectile-find-file
+             "TAB" 'switch-to-buffer
+             ","   'avy-goto-char-2
+             "."   'mode-line-other-buffer
+             "<"   'avy-resume
+             "1"   'delete-other-windows
+             "_"   'split-window-below
+             "|"   'split-window-right
+             "b"   'buffer-menu
+             "B"   'magit-blame-toggle
+             "e"   'counsel-find-file
+             "f"   'counsel-projectile-ag
+             "g"   'magit-status
+             "ci"  'evilnc-comment-or-uncomment-lines
+             "p"   'insert-register
+             "q"   'kill-this-buffer
+             "r"   'counsel-recentf
+             "w"   'save-buffer
+             "x"   'counsel-M-x
+             "y"   'copy-to-register
+             ))
+
+         (evil-mode 1))
+
+       :config
+       (defun minibuffer-keyboard-quit ()
+         "Abort recursive edit.
+     In Delete Selection mode, if the mark is active, just deactivate it;
+     then it takes a second \\[keyboard-quit] to abort the minibuffer."
+         (interactive)
+         (if (and delete-selection-mode transient-mark-mode mark-active)
+             (setq deactivate-mark  t)
+           (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
+           (abort-recursive-edit)))
+
+       ;; Make escape quit everything, whenever possible.
+       (define-key evil-normal-state-map [escape] 'keyboard-quit)
+       (define-key evil-visual-state-map [escape] 'keyboard-quit)
+       (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
+       (define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
+       (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
+       (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
+       (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit))
+   #+END_SRC
+   
+** IDO
+   Set up IDO everywhere
+   #+BEGIN_SRC emacs-lisp
+     (setq ido-everywhere t)
+     (ido-mode 1)
+   #+END_SRC
+
+   [ido-ubiquitous](https://github.com/DarwinAwardWinner/ido-ubiquitous) - Fancy completion
+   #+BEGIN_SRC emacs-lisp
+     (use-package ido-ubiquitous
+       :ensure t
+       :config (ido-ubiquitous-mode 1))
+   #+END_SRC
+
+** Swiper
+   [Smex](https://github.com/nonsequitur/smex) - M-x enhancement
+   #+BEGIN_SRC emacs-lisp
+     (use-package smex
+       :ensure t)
+   #+END_SRC
+   
+   Counsel
+   #+BEGIN_SRC emacs-lisp
+     (use-package counsel
+       :ensure t)
+   #+END_SRC
+   
+   [FLX](https://github.com/lewang/flx) - Fuzzy match
+   #+BEGIN_SRC emacs-lisp
+     (use-package flx
+       :ensure t)
+   #+END_SRC
+
+   [Swiper](https://github.com/abo-abo/swiper)
+   #+BEGIN_SRC emacs-lisp
+     (use-package swiper
+       :ensure t
+       :bind (("C-s" . swiper)
+              ("M-x" . counsel-M-x)
+              ("C-c C-f" . counsel-find-file))
+       :config
+       (ivy-mode 1)
+       (setq ivy-use-virtual-buffers t)
+       (setq ivy-count-format "(%d/%d) ")
+
+       (setq ivy-re-builders-alist
+             '((ivy-switch-buffer . ivy--regex-plus)
+               (t . ivy--regex-fuzzy)))
+       )
+   #+END_SRC
+
+   Use ibuffer to list buffers
+   #+BEGIN_SRC emacs-lisp
+     (defalias 'list-buffers 'ibuffer)
+     ;;(defalias 'list-buffers 'ibuffer-other-window)
+   #+END_SRC
+
+** Projectile
+   Project Interaction Library
+   #+BEGIN_SRC emacs-lisp
+     (use-package projectile
+       :ensure t
+       :config 
+       (projectile-global-mode))
+   #+END_SRC
+   
+   Counsel's Integration
+   #+BEGIN_SRC emacs-lisp
+     (use-package counsel-projectile
+       :ensure t
+       :config
+       (counsel-projectile-on))
+   #+END_SRC
+   
+** AG
+   Silver Search
+   #+BEGIN_SRC emacs-lisp
+     (use-package ag
+       :ensure t
+       :config 
+       (setq ag-executable "/usr/local/bin/ag"))
+   #+END_SRC
+
+** Linum
+   Line numbers
+   #+BEGIN_SRC emacs-lisp
+     (use-package linum-relative
+       :ensure t
+       :bind (("<f7>" . linum-mode))
+       :init 
+       (global-linum-mode t)
+       (linum-relative-mode t) 
+       :config
+       (linum-mode)
+       (custom-set-faces
+        '(linum-relative-current-face ((t (:foreground "#fdf6e3" :background "#073642" :weight bold)))))
+       (setq linum-relative-current-symbol ""))
+   #+END_SRC
+
+** Avy
+   Jump to things
+   #+BEGIN_SRC emacs-lisp
+     (use-package avy
+       :ensure t)
+   #+END_SRC
+
+** Parens
+   Smartparens
+   #+BEGIN_SRC emacs-lisp
+     (use-package smartparens
+       :ensure t)
+   #+END_SRC
+   
+   Rainbow delimiters
+   #+BEGIN_SRC emacs-lisp
+     (use-package rainbow-delimiters
+      :ensure t)
+   #+END_SRC
+
+** Keymaps
+   F5 to refresh buffers
+   #+BEGIN_SRC emacs-lisp
+     (global-set-key (kbd "<f5>") 'revert-buffer)
+   #+END_SRC
+   
+   
+   
+   
