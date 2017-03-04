@@ -518,6 +518,24 @@
      (add-hook 'emacs-lisp-mode-hook 'rzani/elisp-mode-hook)
    #+END_SRC
 
+** YML
+   #+BEGIN_SRC emacs-lisp
+     (use-package yaml-mode
+       :ensure t)
+   #+END_SRC
+
+** Dockerfile
+   #+BEGIN_SRC emacs-lisp
+     (use-package dockerfile-mode
+       :ensure t)
+   #+END_SRC
+
+** Nginx
+   #+BEGIN_SRC emacs-lisp
+     (use-package nginx-mode
+       :ensure t)
+   #+END_SRC
+
 ** Keymaps
    F5 to refresh buffers
    #+BEGIN_SRC emacs-lisp
