@@ -175,6 +175,15 @@
       :init
       (progn
 
+        ;; evil-escape
+        (use-package evil-escape
+          :ensure t
+          :config (progn
+                    (evil-escape-mode)
+		    (setq-default evil-escape-delay 0.2)
+		    (setq-default evil-escape-key-sequence "jk")
+                    ))
+
         ;; evil-surround
         (use-package evil-surround
           :ensure t
@@ -211,18 +220,22 @@
               "SPC" 'projectile-find-file
               "TAB" 'switch-to-buffer
               ","   'avy-goto-char-2
-              "<"   'avy-resume
               "."   'mode-line-other-buffer
+              "<"   'avy-resume
               "1"   'delete-other-windows
               "_"   'split-window-below
               "|"   'split-window-right
               "b"   'buffer-menu
+              "B"   'magit-blame-toggle
               "e"   'counsel-find-file
               "f"   'counsel-projectile-ag
+              "g"   'magit-status
               "ci"  'evilnc-comment-or-uncomment-lines
               "p"   'insert-register
               "q"   'kill-this-buffer
               "r"   'counsel-recentf
+              "w"   'save-buffer
+              "x"   'counsel-M-x
               "y"   'copy-to-register
               )))
 
@@ -230,13 +243,18 @@
 
       :config
       (progn
-        
-        ;; use ido to open files
-        ;;(define-key evil-ex-map "e " 'ido-find-file)
-        ;;(define-key evil-ex-map "b " 'ido-switch-buffer)
-        
-        ;; Make escape quit everything, whenever possible.
 
+        (defun minibuffer-keyboard-quit ()
+          "Abort recursive edit.
+    In Delete Selection mode, if the mark is active, just deactivate it;
+    then it takes a second \\[keyboard-quit] to abort the minibuffer."
+          (interactive)
+          (if (and delete-selection-mode transient-mark-mode mark-active)
+              (setq deactivate-mark  t)
+            (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
+            (abort-recursive-edit)))
+
+        ;; Make escape quit everything, whenever possible.
         (define-key evil-normal-state-map [escape] 'keyboard-quit)
         (define-key evil-visual-state-map [escape] 'keyboard-quit)
         (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
@@ -266,14 +284,6 @@
   #+BEGIN_SRC emacs-lisp
     (use-package try
       :ensure t)
-  #+END_SRC
-  
-* :key: Which-key
-  #+BEGIN_SRC emacs-lisp
-    (use-package which-key
-      :ensure t
-      :diminish (which-key-mode . "which-key")
-      :config (which-key-mode))
   #+END_SRC
   
 * :date: Org-mode
@@ -319,7 +329,7 @@
       ) 
   #+END_SRC
 
-* :book: Auto-Complete
+* :book: Editing
   #+BEGIN_SRC emacs-lisp
     (use-package auto-complete
       :ensure t
@@ -328,6 +338,7 @@
         (ac-config-default)
         (global-auto-complete-mode t)
         ))
+
   #+END_SRC
 
 * :tongue: Langagues
@@ -349,29 +360,21 @@
 ** Web
    #+BEGIN_SRC emacs-lisp
      (use-package web-mode
-       :ensure t) 
+       :ensure t
+       :config (progn
+                 (setq web-mode-engines-alist
+                       '( ("blade"  . "\\.blade\\.")))
 
-     (setq web-mode-engines-alist
-           '( ("blade"  . "\\.blade\\.")))
+                 (setq web-mode-ac-sources-alist
+                       '(("php" . (ac-source-yasnippet ac-source-php-auto-yasnippets))
+                         ("html" . (ac-source-emmet-html-aliases ac-source-emmet-html-snippets))
+                         ("css" . (ac-source-css-property ac-source-emmet-css-snippets))))
 
-     (setq web-mode-ac-sources-alist
-           '(("php" . (ac-source-yasnippet ac-source-php-auto-yasnippets))
-             ("html" . (ac-source-emmet-html-aliases ac-source-emmet-html-snippets))
-             ("css" . (ac-source-css-property ac-source-emmet-css-snippets))))
+                 (add-hook 'web-mode-hook '(lambda()
+                                             (electric-pair-mode -1)
+                                             ))
+                 ))
 
-     (add-hook 'web-mode-hook '(lambda()
-                                 (electric-pair-mode -1)
-                                 ))
-
-   #+END_SRC
-
-** LISP
-   #+BEGIN_SRC emacs-lisp
-     (defun rzani/lisp-mode-hook ()
-       (smartparens-mode t)
-       (rainbow-delimiters-mode t))
-
-     (add-hook 'emacs-lisp-mode-hook 'rzani/lisp-mode-hook)
    #+END_SRC
 
 ** PHP
@@ -392,8 +395,6 @@
 
      (defun rzani/php-config ()
        (php-mode)
-       (eldoc-mode t)
-       (setq auto-fill-function 'do-auto-fill)
        (add-to-list 'write-file-functions 'delete-trailing-whitespace)
        
        ;; make these variables local
@@ -408,8 +409,6 @@
 
      (add-to-list 'auto-mode-alist '("\\.php$" . rzani/php-config))
 
-     (define-key php-mode-map [f6] 'web-mode)
-     (define-key web-mode-map [f6] 'php-mode)
    #+END_SRC
 
 ** YML
@@ -430,3 +429,13 @@
        :ensure t)
    #+END_SRC
    
+* :musical_keyboard: Key Bindings
+  #+BEGIN_SRC emacs-lisp
+    (global-set-key (kbd "C-,") 'rzani/add-comma-end-of-line)
+    (global-set-key (kbd "C-;") 'rzani/add-semicolon-end-of-line)
+
+    (define-key php-mode-map [f6] 'web-mode)
+    (define-key web-mode-map [f6] 'php-mode)
+  #+END_SRC
+
+  

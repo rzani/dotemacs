@@ -128,5 +128,11 @@
         ((string= mode-name "Web")
          (php-mode))))
 
+(defun magit-blame-toggle ()
+  "Toggle magit-blame-mode on and off interactively."
+  (interactive)
+  (if (and (boundp 'magit-blame-mode) magit-blame-mode)
+      (magit-blame-quit)
+    (call-interactively 'magit-blame)))
 
 (provide 'functions)
