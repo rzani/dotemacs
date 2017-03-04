@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: met
+# key: met
+# --
+public function $1($2)
+{
+    $0
+}

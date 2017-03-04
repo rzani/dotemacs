@@ -94,22 +94,6 @@
       (set-frame-font "fira mono for powerline 12")'
    #+END_SRC
 
-** Custom files and functions
-   Load files from ~/.emacs.d/lisp
-   #+BEGIN_SRC
-     (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
-   #+END_SRC
-
-   Load functions.el
-   #+BEGIN_SRC emacs-lisp
-     (require 'functions)
-   #+END_SRC
-
-   Check emacs version compatibility
-   #+BEGIN_SRC emacs-lisp
-     ;;(require 'check-version)
-   #+END_SRC
-
 ** Themes
    Apply Solarized Light theme
    #+BEGIN_SRC emacs-lisp
@@ -147,6 +131,9 @@
 ** Mac OSX
    Make Emacs use the $PATH set up by the user's shell
    #+BEGIN_SRC emacs-lisp
+     ;; create constant to check OS
+     (defconst *is-a-mac* (eq system-type 'darwin))
+
      (use-package exec-path-from-shell
        :ensure t
        :init (exec-path-from-shell-initialize))
@@ -159,7 +146,8 @@
        :ensure t)
    #+END_SRC
 
-** Evil - Extensible VI Layer
+** Evil
+   Extensible VI Layer
    #+BEGIN_SRC emacs-lisp
      (use-package evil
        :ensure t
@@ -408,21 +396,20 @@
        :config (editorconfig-mode 1))
    #+END_SRC
 
-** Indent Guide
-   Show vertical lines to guide indentation
-   #+BEGIN_SRC emacs-lisp
-     (use-package indent-guide
-       :ensure t)
-   #+END_SRC
-
 ** Auto Complete
    #+BEGIN_SRC emacs-lisp
      (use-package auto-complete
        :ensure t
        :diminish (auto-complete-mode . "ac")
-       :init
-       (ac-config-default)
-       (global-auto-complete-mode t))
+       :config (ac-config-default))
+   #+END_SRC
+
+** Yasnippet
+   Template system
+   #+BEGIN_SRC emacs-lisp
+     (use-package yasnippet
+       :ensure t
+       :config (yas-global-mode 1))
    #+END_SRC
 
 ** PHP
@@ -445,7 +432,7 @@
        (setq web-mode-markup-indent-offset 2))
    #+END_SRC
 
-   Install auto complete to php-mode
+   Install autocomplete to php-mode
    #+BEGIN_SRC emacs-lisp
      (use-package ac-php
        :ensure t)
@@ -455,16 +442,19 @@
    #+BEGIN_SRC emacs-lisp
      (defun rzani/php-mode-hook()
        "Configures php-mode"
-       ;; Autocomplete paired brackets
-       (electric-pair-mode 1)
-       ;; Auto complete
+
+       ;; Autocomplete
        (auto-complete-mode t)
-       (setq ac-sources '(ac-source-php) )
-       ;; Show vertical indent guide
-       (indent-guide-mode))
+       (setq ac-sources (append '(ac-source-php) ac-sources))
+
+       ;; Pair brackets
+       (electric-pair-mode 1))
 
      (add-hook 'php-mode-hook 'rzani/php-mode-hook)
    #+END_SRC
+
+   #+RESULTS:
+   | rzani/php-mode-hook |
 
 ** Web mode
    Install web-mode
@@ -495,8 +485,7 @@
 ** Org
    #+BEGIN_SRC emacs-lisp
      (defun rzani/org-mode-hook()
-       "Configure org-mode"
-       (indent-guide-mode))
+       "Configure org-mode")
 
      (add-hook 'org-mode-hook 'rzani/org-mode-hook)
    #+END_SRC
@@ -511,9 +500,7 @@
        ;; Auto close delimiters
        (smartparens-mode)
        ;; Fancy highlights delimiters
-       (rainbow-delimiters-mode)
-       ;; Show vertical indent guide
-       (indent-guide-mode))
+       (rainbow-delimiters-mode))
 
      (add-hook 'emacs-lisp-mode-hook 'rzani/elisp-mode-hook)
    #+END_SRC
