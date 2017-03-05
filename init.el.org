@@ -114,10 +114,18 @@
    #+END_SRC
 
 ** Modeline
+   Install smart-mode-line
    #+BEGIN_SRC emacs-lisp
      (use-package smart-mode-line
        :ensure t
        :config (sml/setup))
+   #+END_SRC
+
+   Install nyan-mode
+   #+BEGIN_SRC emacs-lisp
+     (use-package nyan-mode
+       :ensure t
+       :config (nyan-mode 1))
    #+END_SRC
 
 ** Mac OSX
