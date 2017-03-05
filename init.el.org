@@ -113,6 +113,13 @@
      (load-theme 'atom-one-dark t)
    #+END_SRC
 
+** Modeline
+   #+BEGIN_SRC emacs-lisp
+     (use-package smart-mode-line
+       :ensure t
+       :config (sml/setup))
+   #+END_SRC
+
 ** Mac OSX
    Make Emacs use the $PATH set up by the user's shell
    #+BEGIN_SRC emacs-lisp
