@@ -1,5 +1,5 @@
 (defun split-window-func-with-other-buffer (split-function)
-  "When splitting windows, show (other-buffer) in the new window"
+  "When splitting windows, show (other-buffer) in the new window."
   (lexical-let ((s-f split-function))
     (lambda (&optional arg)
       "Split this window and switch to the new window unless ARG is provided."
@@ -90,12 +90,6 @@
   (interactive)
   (insert "=>"))
 
-(defun switch-to-previous-buffer ()
-  "Switch to previously open buffer.
-    Repeated invocations toggle between the two most recently open buffers."
-  (interactive)
-  (switch-to-buffer (other-buffer (current-buffer) 1)))
-
 (defun sort-lines-by-length (reverse beg end)
   "Sort lines by length."
   (interactive "P\nr")
@@ -112,8 +106,8 @@
 
 (defun minibuffer-keyboard-quit ()
   "Abort recursive edit.
-    In Delete Selection mode, if the mark is active, just deactivate it;
-    then it takes a second \\[keyboard-quit] to abort the minibuffer."
+In Delete Selection mode, if the mark is active, just deactivate it;
+then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (interactive)
   (if (and delete-selection-mode transient-mark-mode mark-active)
       (setq deactivate-mark  t)
@@ -121,6 +115,7 @@
     (abort-recursive-edit)))
 
 (defun toggle-php-flavor-mode ()
+  "Toggle between PHP and WEB modes."
   (interactive)
   "Toggle mode between PHP & Web-Mode Helper modes"
   (cond ((string= mode-name "PHP")
@@ -134,5 +129,10 @@
   (if (and (boundp 'magit-blame-mode) magit-blame-mode)
       (magit-blame-quit)
     (call-interactively 'magit-blame)))
+
+(defun indent-buffer ()
+  "Indent the whole buffer."
+  (interactive)
+  (indent-region (point-min) (point-max)))
 
 (provide 'functions)

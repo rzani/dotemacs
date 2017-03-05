@@ -109,8 +109,8 @@
 
    Load Theme
    #+BEGIN_SRC emacs-lisp
-     ;;(load-theme 'sanityinc-solarized-dark t)
-     (load-theme 'atom-one-dark t)
+     (load-theme 'sanityinc-solarized-dark t)
+     ;; (load-theme 'atom-one-dark t)
    #+END_SRC
 
 ** Modeline
@@ -248,7 +248,7 @@
      (ido-mode 1)
    #+END_SRC
 
-   [ido-ubiquitous](https://github.com/DarwinAwardWinner/ido-ubiquitous) - Fancy completion
+   [[https://github.com/DarwinAwardWinner/ido-ubiquitous][ido-ubiquitous]] - Fancy completion
    #+BEGIN_SRC emacs-lisp
      (use-package ido-ubiquitous
        :ensure t
@@ -412,76 +412,6 @@
        :config (yas-global-mode 1))
    #+END_SRC
 
-** PHP
-   Install php-mode
-   #+BEGIN_SRC emacs-lisp
-     (use-package php-mode
-       :ensure t
-       :config
-       ;; delete trailing whitespace on save
-       (add-to-list 'write-file-functions 'delete-trailing-whitespace)
-
-       ;; make these variables local
-       (make-local-variable 'web-mode-code-indent-offset)
-       (make-local-variable 'web-mode-markup-indent-offset)
-       (make-local-variable 'web-mode-css-indent-offset)
-
-       ;; set indentation, can set different indentation level for different code type
-       (setq web-mode-code-indent-offset 4)
-       (setq web-mode-css-indent-offset 2)
-       (setq web-mode-markup-indent-offset 2))
-   #+END_SRC
-
-   Install autocomplete to php-mode
-   #+BEGIN_SRC emacs-lisp
-     (use-package ac-php
-       :ensure t)
-   #+END_SRC
-
-   Minor modes
-   #+BEGIN_SRC emacs-lisp
-     (defun rzani/php-mode-hook()
-       "Configures php-mode"
-
-       ;; Autocomplete
-       (auto-complete-mode t)
-       (setq ac-sources (append '(ac-source-php) ac-sources))
-
-       ;; Pair brackets
-       (electric-pair-mode 1))
-
-     (add-hook 'php-mode-hook 'rzani/php-mode-hook)
-   #+END_SRC
-
-   #+RESULTS:
-   | rzani/php-mode-hook |
-
-** Web mode
-   Install web-mode
-   #+BEGIN_SRC emacs-lisp
-     (use-package web-mode
-       :ensure t
-       :mode (("\\.html$" . web-mode)
-              ("\\.blade\\.php$" . web-mode))
-       :config
-       (setq web-mode-engines-alist
-             '( ("blade"  . "\\.blade\\.")))
-
-       (setq web-mode-ac-sources-alist
-             '(("php" . (ac-source-yasnippet ac-source-php-auto-yasnippets))
-               ("html" . (ac-source-emmet-html-aliases ac-source-emmet-html-snippets))
-               ("css" . (ac-source-css-property ac-source-emmet-css-snippets)))))
-   #+END_SRC
-
-   Minor modes
-   #+BEGIN_SRC emacs-lisp
-     (defun rzani/web-mode-hook()
-       "Configure web-mode-hook"
-       (electric-pair-mode -1))
-
-     (add-hook 'web-mode-hook 'rzani/web-mode-hook)
-   #+END_SRC
-
 ** Org
    UTF-8 bullets
    #+BEGIN_SRC emacs-lisp
@@ -491,44 +421,106 @@
        (add-hook 'org-mode-hook '(lambda() (org-bullets-mode))))
    #+END_SRC
 
-   Making org-mode beautiful
-   #+BEGIN_SRC emacs-lisp
-     (use-package org-beautify-theme
-       :ensure t)
-   #+END_SRC
+** Languages
+*** PHP
+    Install php-mode
+    #+BEGIN_SRC emacs-lisp
+      (use-package php-mode
+      :ensure t
+      :config
+      ;; Automatically delete trailing whitespace on save
+      (add-to-list 'write-file-functions 'delete-trailing-whitespace)
 
-** ELisp
-   #+BEGIN_SRC emacs-lisp
-     (defun rzani/elisp-mode-hook()
-       "Configures ELisp mode hook"
+      ;; make these variables local
+      (make-local-variable 'web-mode-code-indent-offset)
+      (make-local-variable 'web-mode-markup-indent-offset)
+      (make-local-variable 'web-mode-css-indent-offset)
 
-       ;; Show matching paren
-       (show-paren-mode)
-       ;; Auto close delimiters
-       (smartparens-mode)
-       ;; Fancy highlights delimiters
-       (rainbow-delimiters-mode))
+      ;; set indentation, can set different indentation level for different code type
+      (setq web-mode-code-indent-offset 4)
+      (setq web-mode-css-indent-offset 2)
+      (setq web-mode-markup-indent-offset 2))
+    #+END_SRC
 
-     (add-hook 'emacs-lisp-mode-hook 'rzani/elisp-mode-hook)
-   #+END_SRC
+    Install autocomplete to php-mode
+    #+BEGIN_SRC emacs-lisp
+      (use-package ac-php
+      :ensure t)
+    #+END_SRC
 
-** YML
-   #+BEGIN_SRC emacs-lisp
-     (use-package yaml-mode
-       :ensure t)
-   #+END_SRC
+    Minor modes
+    #+BEGIN_SRC emacs-lisp
+      (defun rzani/php-mode-hook()
+      "Configures php-mode"
 
-** Dockerfile
-   #+BEGIN_SRC emacs-lisp
-     (use-package dockerfile-mode
-       :ensure t)
-   #+END_SRC
+      ;; Autocomplete
+      (auto-complete-mode t)
+      (setq ac-sources (append '(ac-source-php) ac-sources))
 
-** Nginx
-   #+BEGIN_SRC emacs-lisp
-     (use-package nginx-mode
-       :ensure t)
-   #+END_SRC
+      ;; Pair brackets
+      (electric-pair-mode 1))
+
+      (add-hook 'php-mode-hook 'rzani/php-mode-hook)
+    #+END_SRC
+
+*** Web mode
+    Install web-mode
+    #+BEGIN_SRC emacs-lisp
+      (use-package web-mode
+        :ensure t
+        :mode (("\\.html$" . web-mode)
+               ("\\.blade\\.php$" . web-mode))
+        :config
+        (setq web-mode-engines-alist
+              '( ("blade"  . "\\.blade\\.")))
+
+        (setq web-mode-ac-sources-alist
+              '(("php" . (ac-source-yasnippet ac-source-php-auto-yasnippets))
+                ("html" . (ac-source-emmet-html-aliases ac-source-emmet-html-snippets))
+                ("css" . (ac-source-css-property ac-source-emmet-css-snippets)))))
+    #+END_SRC
+
+    Minor modes
+    #+BEGIN_SRC emacs-lisp
+      (defun rzani/web-mode-hook()
+        "Configure web-mode-hook"
+        (electric-pair-mode -1))
+
+      (add-hook 'web-mode-hook 'rzani/web-mode-hook)
+    #+END_SRC
+
+*** ELisp
+    #+BEGIN_SRC emacs-lisp
+      (defun rzani/elisp-mode-hook()
+        "Configures ELisp mode hook"
+
+        ;; Show matching paren
+        (show-paren-mode)
+        ;; Auto close delimiters
+        (smartparens-mode)
+        ;; Fancy highlights delimiters
+        (rainbow-delimiters-mode))
+
+      (add-hook 'emacs-lisp-mode-hook 'rzani/elisp-mode-hook)
+    #+END_SRC
+
+*** YML
+    #+BEGIN_SRC emacs-lisp
+      (use-package yaml-mode
+        :ensure t)
+    #+END_SRC
+
+*** Dockerfile
+    #+BEGIN_SRC emacs-lisp
+      (use-package dockerfile-mode
+        :ensure t)
+    #+END_SRC
+
+*** Nginx
+    #+BEGIN_SRC emacs-lisp
+      (use-package nginx-mode
+        :ensure t)
+    #+END_SRC
 
 ** Keymaps
    F5 to refresh buffers
