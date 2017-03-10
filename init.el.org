@@ -101,15 +101,9 @@
       :ensure t)
    #+END_SRC
 
-   Install Atom One Dark theme
-   #+BEGIN_SRC emacs-lisp
-     (use-package atom-one-dark-theme
-       :ensure t)
-   #+END_SRC
-
    Load Theme
    #+BEGIN_SRC emacs-lisp
-     (load-theme 'sanityinc-solarized-dark t)
+     (load-theme 'sanityinc-solarized-light t)
      ;; (load-theme 'atom-one-dark t)
    #+END_SRC
 
@@ -119,13 +113,6 @@
      (use-package smart-mode-line
        :ensure t
        :config (sml/setup))
-   #+END_SRC
-
-   Install nyan-mode
-   #+BEGIN_SRC emacs-lisp
-     (use-package nyan-mode
-       :ensure t
-       :config (nyan-mode 1))
    #+END_SRC
 
 ** Mac OSX
@@ -196,7 +183,7 @@
            (setq evil-leader/in-all-states t)
 
            (evil-leader/set-key
-             "SPC" 'projectile-find-file
+             "SPC" 'counsel-git
              "TAB" 'switch-to-buffer
              ","   'avy-goto-char-2
              "."   'mode-line-other-buffer
@@ -207,7 +194,7 @@
              "b"   'buffer-menu
              "B"   'magit-blame-toggle
              "e"   'counsel-find-file
-             "f"   'counsel-projectile-ag
+             "f"   'counsel-git-grep
              "g"   'magit-status
              "ci"  'evilnc-comment-or-uncomment-lines
              "p"   'insert-register
@@ -526,6 +513,15 @@
    F5 to refresh buffers
    #+BEGIN_SRC emacs-lisp
      (global-set-key (kbd "<f5>") 'revert-buffer)
+   #+END_SRC
+
+   Add comma and semicolon
+   #+BEGIN_SRC emacs-lisp
      (global-set-key (kbd "C-,") 'rzani/add-comma-end-of-line)
      (global-set-key (kbd "C-;") 'rzani/add-semicolon-end-of-line)
+   #+END_SRC
+
+   Indent all buffer
+   #+BEGIN_SRC emacs-lisp
+     (global-set-key (kbd "C-c i") 'indent-buffer)
    #+END_SRC
