@@ -101,6 +101,8 @@
       :ensure t)
    #+END_SRC
 
+   #+RESULTS:
+
    Load Theme
    #+BEGIN_SRC emacs-lisp
      (load-theme 'sanityinc-solarized-light t)
@@ -474,6 +476,24 @@
         (electric-pair-mode -1))
 
       (add-hook 'web-mode-hook 'rzani/web-mode-hook)
+    #+END_SRC
+
+*** Go
+    Install go-mode
+    #+BEGIN_SRC emacs-lisp
+      (use-package go-mode
+        :ensure t
+        :mode(("\\.go$" . go-mode))
+        :config
+	(add-to-list 'write-file-functions 'delete-trailing-whitespace))
+
+      (defun rzani/go-mode-hook()
+        "Setting up go-mode"
+
+        ;; Pair brackets
+        (electric-pair-mode 1))
+
+      (add-hook 'go-mode-hook 'rzani/go-mode-hook)
     #+END_SRC
 
 *** ELisp
