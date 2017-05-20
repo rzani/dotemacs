@@ -56,6 +56,7 @@
 
    Abbreviate buffer filename
    #+BEGIN_SRC emacs-lisp
+     (diminish 'abbrev-mode "")
      (setq frame-title-format
 	   '((:eval (if (buffer-file-name)
 			(abbreviate-file-name (buffer-file-name))
@@ -101,8 +102,6 @@
       :ensure t)
    #+END_SRC
 
-   #+RESULTS:
-
    Load Theme
    #+BEGIN_SRC emacs-lisp
      (load-theme 'sanityinc-solarized-light t)
@@ -110,11 +109,26 @@
    #+END_SRC
 
 ** Modeline
-   Install smart-mode-line
+   Install mode-icons
    #+BEGIN_SRC emacs-lisp
-     (use-package smart-mode-line
+     (use-package mode-icons
        :ensure t
-       :config (sml/setup))
+       :config (mode-icons-mode))
+   #+END_SRC
+
+   Install telephone-line
+   #+BEGIN_SRC emacs-lisp
+     (use-package telephone-line
+       :ensure t
+       :init
+       (setq telephone-line-primary-left-separator 'telephone-line-identity-left
+             telephone-line-secondary-left-separator 'telephone-line-identity-hollow-left
+             telephone-line-primary-right-separator 'telephone-line-identity-right
+             telephone-line-secondary-right-separator 'telephone-line-identity-hollow-right)
+       (setq telephone-line-height 24
+             telephone-line-evil-use-short-tag t)
+       :config
+       (telephone-line-evil-config))
    #+END_SRC
 
 ** Mac OSX
@@ -146,7 +160,8 @@
          ;; Escape with jk keys
          (use-package evil-escape
            :ensure t
-           :config
+           :diminish (evil-escape-mode)
+	   :config
            (evil-escape-mode)
            (setq-default evil-escape-delay 0.2)
            (setq-default evil-escape-key-sequence "jk"))
@@ -169,6 +184,7 @@
          ;; C-t (evil-mc-skip-and-goto-next-match)
          (use-package evil-mc
            :ensure t
+           :diminish (evil-mc-mode)
            :config
            (global-evil-mc-mode  1))
 
@@ -290,6 +306,7 @@
 ** Projectile
    Project Interaction Library
    #+BEGIN_SRC emacs-lisp
+     (setq projectile-mode-line '(:eval (format " [%s]" (projectile-project-name))))
      (use-package projectile
        :ensure t
        :config
@@ -372,7 +389,7 @@
    #+BEGIN_SRC emacs-lisp
      (use-package flycheck
        :ensure t
-       :diminish (flycheck-mode . "fly")
+       :diminish (flycheck-mode)
        :config (global-flycheck-mode))
    #+END_SRC
 
@@ -381,7 +398,7 @@
    #+BEGIN_SRC emacs-lisp
      (use-package editorconfig
        :ensure t
-       :diminish (editorconfig-mode . "editorconfig")
+       :diminish (editorconfig-mode . "")
        :config (editorconfig-mode 1))
    #+END_SRC
 
@@ -389,7 +406,7 @@
    #+BEGIN_SRC emacs-lisp
      (use-package auto-complete
        :ensure t
-       :diminish (auto-complete-mode . "ac")
+       :diminish (auto-complete-mode)
        :config (ac-config-default))
    #+END_SRC
 
