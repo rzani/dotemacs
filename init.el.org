@@ -102,6 +102,9 @@
       :ensure t)
    #+END_SRC
 
+   #+RESULTS:
+
+
    Load Theme
    #+BEGIN_SRC emacs-lisp
      (load-theme 'sanityinc-solarized-light t)
@@ -114,21 +117,6 @@
      (use-package mode-icons
        :ensure t
        :config (mode-icons-mode))
-   #+END_SRC
-
-   Install telephone-line
-   #+BEGIN_SRC emacs-lisp
-     (use-package telephone-line
-       :ensure t
-       :init
-       (setq telephone-line-primary-left-separator 'telephone-line-identity-left
-             telephone-line-secondary-left-separator 'telephone-line-identity-hollow-left
-             telephone-line-primary-right-separator 'telephone-line-identity-right
-             telephone-line-secondary-right-separator 'telephone-line-identity-hollow-right)
-       (setq telephone-line-height 24
-             telephone-line-evil-use-short-tag t)
-       :config
-       (telephone-line-evil-config))
    #+END_SRC
 
 ** Mac OSX
@@ -404,10 +392,25 @@
 
 ** Auto Complete
    #+BEGIN_SRC emacs-lisp
-     (use-package auto-complete
+     ;; (use-package auto-complete
+     ;;   :ensure t
+     ;;   :diminish (auto-complete-mode)
+     ;;   :config (ac-config-default))
+   #+END_SRC
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package company
        :ensure t
-       :diminish (auto-complete-mode)
-       :config (ac-config-default))
+       :defer t
+       :init
+       (global-company-mode)
+       :config
+       (setq company-idle-delay 0.2)
+       (setq company-selection-wrap-around t)
+       (define-key company-active-map (kbd "ESC") 'company-abort)
+       (define-key evil-insert-state-map (kbd "C-SPC") 'company-complete)
+       (define-key company-active-map (kbd "C-n") 'company-select-next)
+       (define-key company-active-map (kbd "C-p") 'company-select-previous))
    #+END_SRC
 
 ** Yasnippet
@@ -450,21 +453,30 @@
 
     Install autocomplete to php-mode
     #+BEGIN_SRC emacs-lisp
-      (use-package ac-php
+      (use-package php-extras
       :ensure t)
     #+END_SRC
 
     Minor modes
     #+BEGIN_SRC emacs-lisp
       (defun rzani/php-mode-hook()
-      "Configures php-mode"
+        "Configures php-mode"
 
-      ;; Autocomplete
-      (auto-complete-mode t)
-      (setq ac-sources (append '(ac-source-php) ac-sources))
+        (when (boundp 'company-backends)
+          (setq-local company-backends
+                      '((company-dabbrev-code php-extras-company))))
 
-      ;; Pair brackets
-      (electric-pair-mode 1))
+        (when (fboundp 'php-extras-eldoc-documentation-function)
+          (add-function :before-until (local 'eldoc-documentation-function)
+                        'php-extras-eldoc-documentation-function))
+
+        ;; Autocomplete
+        ;;(auto-complete-mode t)
+        ;;(setq ac-sources (append '(ac-source-php) ac-sources))
+
+        (eldoc-mode t)
+        ;; Pair brackets
+        (electric-pair-mode 1))
 
       (add-hook 'php-mode-hook 'rzani/php-mode-hook)
     #+END_SRC
@@ -481,13 +493,23 @@
               '( ("blade"  . "\\.blade\\.")))
 
         (setq web-mode-ac-sources-alist
-              '(("php" . (ac-source-yasnippet ac-source-php-auto-yasnippets))
+              '(("php" . (ac-source-php-extras ac-source-yasnippet ac-source-gtags ac-source-abbrev ac-source-dictionary ac-source-wordsin-same-mode-buffers))
                 ("html" . (ac-source-emmet-html-aliases ac-source-emmet-html-snippets))
-                ("css" . (ac-source-css-property ac-source-emmet-css-snippets)))))
+                ("css" . (ac-source-css-property ac-source-abbrev ac-source-dictionary ac-source-words-in-same-mode-buffers)))))
     #+END_SRC
 
     Minor modes
     #+BEGIN_SRC emacs-lisp
+      (add-hook 'web-mode-before-auto-complete-hooks
+                '(lambda ()
+                   (let ((web-mode-cur-language (web-mode-language-at-pos)))
+                     (if (string= web-mode-cur-language "php")
+                         (yas-activate-extra-mode 'php-mode)
+                       (yas-deactivate-extra-mode 'php-mode))
+                     (if (string= web-mode-cur-language "css")
+                         (setq emmet-use-css-transform t)
+                       (setq emmet-use-css-transform nil)))))
+
       (defun rzani/web-mode-hook()
         "Configure web-mode-hook"
         (electric-pair-mode -1))
