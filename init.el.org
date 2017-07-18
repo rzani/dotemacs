@@ -95,42 +95,6 @@
       (set-frame-font "fira mono for powerline 12")'
    #+END_SRC
 
-** Themes
-   Install Solarized from sanityinc
-   #+BEGIN_SRC emacs-lisp
-    (use-package color-theme-sanityinc-solarized
-      :ensure t)
-   #+END_SRC
-
-   Load Theme
-   #+BEGIN_SRC emacs-lisp
-     (load-theme 'sanityinc-solarized-light t)
-     ;; (load-theme 'atom-one-dark t)
-   #+END_SRC
-
-** Modeline
-   Install mode-icons
-   #+BEGIN_SRC emacs-lisp
-     (use-package mode-icons
-       :ensure t
-       :config (mode-icons-mode))
-   #+END_SRC
-
-   Install telephone-line
-   #+BEGIN_SRC emacs-lisp
-     (use-package telephone-line
-       :ensure t
-       :init
-       (setq telephone-line-primary-left-separator 'telephone-line-identity-left
-             telephone-line-secondary-left-separator 'telephone-line-identity-hollow-left
-             telephone-line-primary-right-separator 'telephone-line-identity-right
-             telephone-line-secondary-right-separator 'telephone-line-identity-hollow-right)
-       (setq telephone-line-height 24
-             telephone-line-evil-use-short-tag t)
-       :config
-       (telephone-line-evil-config))
-   #+END_SRC
-
 ** Mac OSX
    Make Emacs use the $PATH set up by the user's shell
    #+BEGIN_SRC emacs-lisp
@@ -201,7 +165,7 @@
            (setq evil-leader/in-all-states t)
 
            (evil-leader/set-key
-             "SPC" 'counsel-git
+             "SPC" 'projectile-find-file
              "TAB" 'switch-to-buffer
              ","   'avy-goto-char-2
              "."   'mode-line-other-buffer
@@ -212,7 +176,7 @@
              "b"   'buffer-menu
              "B"   'magit-blame-toggle
              "e"   'counsel-find-file
-             "f"   'counsel-git-grep
+             "f"   'counsel-ag
              "g"   'magit-status
              "ci"  'evilnc-comment-or-uncomment-lines
              "p"   'insert-register
@@ -270,6 +234,9 @@
    Counsel
    #+BEGIN_SRC emacs-lisp
      (use-package counsel
+       :ensure t)
+
+     (use-package counsel-ag
        :ensure t)
    #+END_SRC
 
@@ -427,8 +394,21 @@
        (add-hook 'org-mode-hook '(lambda() (org-bullets-mode))))
    #+END_SRC
 
+** GGTAGS
+   #+BEGIN_SRC emacs-lisp
+     (use-package ggtags
+       :ensure t
+       :commands ggtags-mode
+       :diminish ggtags-mode
+       :config
+       (setq ggtags-completing-read-function nil))
+   #+END_SRC
+
 ** Languages
 *** PHP
+    :PROPERTIES:
+    :ORDERED:  t
+    :END:
     Install php-mode
     #+BEGIN_SRC emacs-lisp
       (use-package php-mode
@@ -451,7 +431,8 @@
     Install autocomplete to php-mode
     #+BEGIN_SRC emacs-lisp
       (use-package ac-php
-      :ensure t)
+        :ensure t
+        :after php-mode)
     #+END_SRC
 
     Minor modes
@@ -467,6 +448,26 @@
       (electric-pair-mode 1))
 
       (add-hook 'php-mode-hook 'rzani/php-mode-hook)
+    #+END_SRC
+
+*** JS
+    #+BEGIN_SRC emacs-lisp
+      (use-package js2-mode
+        :ensure t
+        :config
+        (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
+
+
+      (use-package json-mode
+        :ensure t)
+
+      (defun rzani/js-mode-hook()
+        "Configure js2-mode"
+        (auto-complete-mode t)
+        (electric-pair-mode 1)
+        )
+
+      (add-hook 'js2-mode 'rzani/js-mode-hook)
     #+END_SRC
 
 *** Web mode
@@ -561,4 +562,17 @@
    Indent all buffer
    #+BEGIN_SRC emacs-lisp
      (global-set-key (kbd "C-c i") 'indent-buffer)
+   #+END_SRC
+
+** Themes
+   Install Solarized from sanityinc
+   #+BEGIN_SRC emacs-lisp
+    (use-package color-theme-sanityinc-solarized
+      :ensure t)
+   #+END_SRC
+
+   Load Theme
+   #+BEGIN_SRC emacs-lisp
+     (load-theme 'sanityinc-solarized-light t)
+     ;; (load-theme 'atom-one-dark t)
    #+END_SRC
