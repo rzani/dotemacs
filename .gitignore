@@ -1,6 +1,7 @@
 elpa
-myinit.el
 recentf
 projectile-bookmarks.eld
 ac-comphist.dat
-
+auto-save-list
+custom.el
+init.el.el

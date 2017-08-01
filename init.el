@@ -28,6 +28,12 @@
 (eval-when-compile
   (require 'use-package))
 
+;; Set location of custom.el
+(setq custom-file (expand-file-name "~/.emacs.d/custom.el"))
+
+;; Load custom file
+(load custom-file 'noerror)
+
 ;; Load init.el.org and evaluate
 (org-babel-load-file (expand-file-name "~/.emacs.d/init.el.org"))
 

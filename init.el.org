@@ -1,19 +1,5 @@
 #+STARTUP: content
 * init.el
-** Version check
-   #+BEGIN_SRC emacs-lisp
-     (let ((minver "23.3"))
-       (when (version<= emacs-version "23.1")
-         (error "Your Emacs is too old -- this config requires v%s or higher" minver)))
-     (when (version<= emacs-version "24")
-       (message "Your Emacs is old, and some functionality in this config will be disabled. Please upgrade if possible."))
-
-     ;; create constant to check OS
-     (defconst *is-a-mac* (eq system-type 'darwin))
-     (defconst *spell-check-support-enabled* nil) ;; Enable with t if you prefer
-
-     (provide 'check-version)
-   #+END_SRC
 ** Interface and tweaks
    Always answer y or n
    #+BEGIN_SRC emacs-lisp
@@ -79,38 +65,6 @@
      ;;  '(initial-frame-alist (quote ((fullscreen . maximized)))))
    #+END_SRC
 
-** Custom file
-   Set location of custom.el
-   #+BEGIN_SRC emacs-lisp
-      (setq custom-file (expand-file-name "~/.emacs.d/custom.el"))
-   #+END_SRC
-
-   Load custom file
-   #+BEGIN_SRC emacs-lisp
-      (load custom-file 'noerror)
-   #+END_SRC
-
-** Font
-   Use the Fira Mono for Powerline font.
-   #+BEGIN_SRC emacs-lisp
-      (add-to-list 'default-frame-alist '(font . "fira mono for powerline 12" ))
-      (set-face-attribute 'default t :font "fira mono for powerline 12" )
-      (set-frame-font "fira mono for powerline 12")'
-   #+END_SRC
-
-** Themes
-   Install Solarized from sanityinc
-   #+BEGIN_SRC emacs-lisp
-    (use-package color-theme-sanityinc-solarized
-      :ensure t)
-   #+END_SRC
-
-   Load Theme
-   #+BEGIN_SRC emacs-lisp
-     (load-theme 'sanityinc-solarized-light t)
-     ;; (load-theme 'atom-one-dark t)
-   #+END_SRC
-
 ** Mac OSX
    Make Emacs use the $PATH set up by the user's shell
    #+BEGIN_SRC emacs-lisp
@@ -122,13 +76,6 @@
        :init (exec-path-from-shell-initialize))
    #+END_SRC
 
-** Try
-   Try packages and don't mess around
-   #+BEGIN_SRC emacs-lisp
-     (use-package try
-       :ensure t)
-   #+END_SRC
-
 ** Evil
    Extensible VI Layer
    #+BEGIN_SRC emacs-lisp
@@ -136,15 +83,6 @@
        :ensure t
        :init
        (progn
-         ;; Escape with jk keys
-         (use-package evil-escape
-           :ensure t
-           :diminish (evil-escape-mode)
-           :config
-           (evil-escape-mode)
-           (setq-default evil-escape-delay 0.2)
-           (setq-default evil-escape-key-sequence "jk"))
-
          ;; Surround around
          (use-package evil-surround
            :ensure t
@@ -180,7 +118,7 @@
            (setq evil-leader/in-all-states t)
 
            (evil-leader/set-key
-             "SPC" 'counsel-git
+             "SPC" 'projectile-find-file
              "TAB" 'switch-to-buffer
              ","   'avy-goto-char-2
              "."   'mode-line-other-buffer
@@ -205,8 +143,8 @@
        :config
        (defun minibuffer-keyboard-quit ()
          "Abort recursive edit.
-     In Delete Selection mode, if the mark is active, just deactivate it;
-     then it takes a second \\[keyboard-quit] to abort the minibuffer."
+      In Delete Selection mode, if the mark is active, just deactivate it;
+      then it takes a second \\[keyboard-quit] to abort the minibuffer."
          (interactive)
          (if (and delete-selection-mode transient-mark-mode mark-active)
              (setq deactivate-mark  t)
@@ -223,15 +161,40 @@
        (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit))
    #+END_SRC
 
+   Escape with jk keys
+*** Evil Escape
+    #+BEGIN_SRC emacs-lisp
+      (use-package evil-escape
+        :ensure t
+        :diminish (evil-escape-mode)
+        :config
+        (evil-escape-mode)
+        (setq-default evil-escape-delay 0.2)
+        (setq-default evil-escape-key-sequence "jk"))
+    #+END_SRC
+
+
+** Try
+   Try packages and don't mess around
+   #+BEGIN_SRC emacs-lisp
+     (use-package try
+       :ensure t)
+   #+END_SRC
+
 ** Modeline
    Changing modeline
    #+BEGIN_SRC emacs-lisp
      (use-package telephone-line
        :ensure t
        :init
-       (telephone-line-evil-config)
+       (setq telephone-line-primary-left-separator 'telephone-line-identity-left
+             telephone-line-secondary-left-separator 'telephone-line-identity-hollow-left
+             telephone-line-primary-right-separator 'telephone-line-identity-right
+             telephone-line-secondary-right-separator 'telephone-line-identity-hollow-right)
+       (setq telephone-line-height 24
+             telephone-line-evil-use-short-tag t)
        :config
-       (telephone-line-mode 1))
+       (telephone-line-evil-config))
    #+END_SRC
 
    Install mode-icons
@@ -246,13 +209,6 @@
    #+BEGIN_SRC emacs-lisp
      (setq ido-everywhere t)
      (ido-mode 1)
-   #+END_SRC
-
-   [[https://github.com/DarwinAwardWinner/ido-ubiquitous][ido-ubiquitous]] - Fancy completion
-   #+BEGIN_SRC emacs-lisp
-     (use-package ido-ubiquitous
-       :ensure t
-       :config (ido-ubiquitous-mode 1))
    #+END_SRC
 
 ** Swiper
@@ -352,12 +308,14 @@
    Smartparens
    #+BEGIN_SRC emacs-lisp
      (use-package smartparens
+       :bind (("<f8>" . smartparens-mode))
        :ensure t)
    #+END_SRC
 
    Rainbow delimiters
    #+BEGIN_SRC emacs-lisp
      (use-package rainbow-delimiters
+       :bind (("<f6>" . rainbow-delimiters-mode))
       :ensure t)
    #+END_SRC
 
@@ -388,29 +346,6 @@
        :ensure t
        :diminish (editorconfig-mode . "")
        :config (editorconfig-mode 1))
-   #+END_SRC
-
-** Auto Complete
-   #+BEGIN_SRC emacs-lisp
-     ;; (use-package auto-complete
-     ;;   :ensure t
-     ;;   :diminish (auto-complete-mode)
-     ;;   :config (ac-config-default))
-   #+END_SRC
-
-   #+BEGIN_SRC emacs-lisp
-     (use-package company
-       :ensure t
-       :defer t
-       :init
-       (global-company-mode)
-       :config
-       (setq company-idle-delay 0.2)
-       (setq company-selection-wrap-around t)
-       (define-key company-active-map (kbd "ESC") 'company-abort)
-       (define-key evil-insert-state-map (kbd "C-SPC") 'company-complete)
-       (define-key company-active-map (kbd "C-n") 'company-select-next)
-       (define-key company-active-map (kbd "C-p") 'company-select-previous))
    #+END_SRC
 
 ** Yasnippet
@@ -451,34 +386,37 @@
       (setq web-mode-markup-indent-offset 2))
     #+END_SRC
 
-    Install autocomplete to php-mode
-    #+BEGIN_SRC emacs-lisp
-      (use-package php-extras
-      :ensure t)
-    #+END_SRC
-
     Minor modes
     #+BEGIN_SRC emacs-lisp
       (defun rzani/php-mode-hook()
         "Configures php-mode"
 
-        (when (boundp 'company-backends)
-          (setq-local company-backends
-                      '((company-dabbrev-code php-extras-company))))
-
-        (when (fboundp 'php-extras-eldoc-documentation-function)
-          (add-function :before-until (local 'eldoc-documentation-function)
-                        'php-extras-eldoc-documentation-function))
-
         ;; Autocomplete
         ;;(auto-complete-mode t)
         ;;(setq ac-sources (append '(ac-source-php) ac-sources))
 
-        (eldoc-mode t)
         ;; Pair brackets
         (electric-pair-mode 1))
-
       (add-hook 'php-mode-hook 'rzani/php-mode-hook)
+    #+END_SRC
+
+*** JS
+    #+BEGIN_SRC emacs-lisp
+      (use-package js2-mode
+        :ensure t
+        :config
+        (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
+
+
+      (use-package json-mode
+        :ensure t)
+
+      (defun rzani/js-mode-hook()
+        "Configure js2-mode"
+        (auto-complete-mode t)
+        (electric-pair-mode 1))
+
+      (add-hook 'js2-mode 'rzani/js-mode-hook)
     #+END_SRC
 
 *** Web mode
@@ -583,4 +521,24 @@
    Indent all buffer
    #+BEGIN_SRC emacs-lisp
      (global-set-key (kbd "C-c i") 'indent-buffer)
+   #+END_SRC
+
+** Themes
+   Install Solarized from sanityinc
+   #+BEGIN_SRC emacs-lisp
+    (use-package color-theme-sanityinc-solarized
+      :ensure t)
+   #+END_SRC
+
+   Load Theme
+   #+BEGIN_SRC emacs-lisp
+     (load-theme 'sanityinc-solarized-light t)
+     ;; (load-theme 'atom-one-dark t)
+   #+END_SRC
+** Font
+   Use the Fira Mono for Powerline font.
+   #+BEGIN_SRC emacs-lisp
+      (add-to-list 'default-frame-alist '(font . "fira mono for powerline 12" ))
+      (set-face-attribute 'default t :font "fira mono for powerline 12" )
+      (set-frame-font "fira mono for powerline 12")
    #+END_SRC
