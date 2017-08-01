@@ -65,6 +65,25 @@
      ;;  '(initial-frame-alist (quote ((fullscreen . maximized)))))
    #+END_SRC
 
+** Custom file
+   Set location of custom.el
+   #+BEGIN_SRC emacs-lisp
+      (setq custom-file (expand-file-name "~/.emacs.d/custom.el"))
+   #+END_SRC
+
+   Load custom file
+   #+BEGIN_SRC emacs-lisp
+      (load custom-file 'noerror)
+   #+END_SRC
+
+** Font
+   Use the Fira Mono for Powerline font.
+   #+BEGIN_SRC emacs-lisp
+      (add-to-list 'default-frame-alist '(font . "fira mono for powerline 12" ))
+      (set-face-attribute 'default t :font "fira mono for powerline 12" )
+      (set-frame-font "fira mono for powerline 12")'
+   #+END_SRC
+
 ** Mac OSX
    Make Emacs use the $PATH set up by the user's shell
    #+BEGIN_SRC emacs-lisp
@@ -172,7 +191,6 @@
         (setq-default evil-escape-delay 0.2)
         (setq-default evil-escape-key-sequence "jk"))
     #+END_SRC
-
 
 ** Try
    Try packages and don't mess around
@@ -391,10 +409,6 @@
       (defun rzani/php-mode-hook()
         "Configures php-mode"
 
-        ;; Autocomplete
-        ;;(auto-complete-mode t)
-        ;;(setq ac-sources (append '(ac-source-php) ac-sources))
-
         ;; Pair brackets
         (electric-pair-mode 1))
       (add-hook 'php-mode-hook 'rzani/php-mode-hook)
@@ -415,6 +429,26 @@
         "Configure js2-mode"
         (auto-complete-mode t)
         (electric-pair-mode 1))
+
+      (add-hook 'js2-mode 'rzani/js-mode-hook)
+    #+END_SRC
+
+*** JS
+    #+BEGIN_SRC emacs-lisp
+      (use-package js2-mode
+        :ensure t
+        :config
+        (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
+
+
+      (use-package json-mode
+        :ensure t)
+
+      (defun rzani/js-mode-hook()
+        "Configure js2-mode"
+        (auto-complete-mode t)
+        (electric-pair-mode 1)
+        )
 
       (add-hook 'js2-mode 'rzani/js-mode-hook)
     #+END_SRC
@@ -534,11 +568,4 @@
    #+BEGIN_SRC emacs-lisp
      (load-theme 'sanityinc-solarized-light t)
      ;; (load-theme 'atom-one-dark t)
-   #+END_SRC
-** Font
-   Use the Fira Mono for Powerline font.
-   #+BEGIN_SRC emacs-lisp
-      (add-to-list 'default-frame-alist '(font . "fira mono for powerline 12" ))
-      (set-face-attribute 'default t :font "fira mono for powerline 12" )
-      (set-frame-font "fira mono for powerline 12")
    #+END_SRC
