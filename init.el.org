@@ -445,26 +445,6 @@
       (add-hook 'js2-mode 'rzani/js-mode-hook)
     #+END_SRC
 
-*** JS
-    #+BEGIN_SRC emacs-lisp
-      (use-package js2-mode
-        :ensure t
-        :config
-        (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
-
-
-      (use-package json-mode
-        :ensure t)
-
-      (defun rzani/js-mode-hook()
-        "Configure js2-mode"
-        (auto-complete-mode t)
-        (electric-pair-mode 1)
-        )
-
-      (add-hook 'js2-mode 'rzani/js-mode-hook)
-    #+END_SRC
-
 *** Web mode
     Install web-mode
     #+BEGIN_SRC emacs-lisp
