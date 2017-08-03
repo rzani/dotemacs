@@ -136,7 +136,7 @@
     #+END_SRC
 
 *** Evil Surround
-    Surround around
+    Surrounding: parentheses, brackets, quotes, XML tags, and more.
     #+BEGIN_SRC emacs-lisp
       (use-package evil-surround
         :ensure t
@@ -145,7 +145,7 @@
     #+END_SRC
 
 *** Evil Matchit
-    Press “%” to jump between matched tags
+    Press "%" to jump between matched tags
     #+BEGIN_SRC emacs-lisp
       (use-package evil-matchit
         :ensure t
@@ -154,7 +154,7 @@
     #+END_SRC
 
 *** Evil MC
-    Multi-cursors
+    Multi cursors editing
     #+BEGIN_SRC emacs-lisp
       ;; C-n (evil-mc-make-and-goto-next-match)
       ;; C-p (evil-mc-make-and-goto-prev-match)
