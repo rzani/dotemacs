@@ -1,0 +1,86 @@
+
+
+Por aqui fica muito mais facil de ligar, reiniciar e desligar o ambiente do [[https://github.com/laradock/laradock][Laradock]]
+
+* From zero to hero
+
+**  Install Docker
+
+*** On Ubuntu >= 16.04
+
+    Removes old docker versions
+    #+BEGIN_SRC sh :tangle no :dir /sudo::
+      apt purge docker docker-engine docker.io
+    #+END_SRC
+
+    Install dependencies
+    #+BEGIN_SRC sh :tangle no :dir /sudo:: :results output silent
+      apt install \
+           apt-transport-https \
+           ca-certificates \
+           curl \
+           software-properties-common
+    #+END_SRC
+
+    Add Docker’s official GPG key:
+    #+BEGIN_SRC sh :tangle no :dir /sudo:: :results output silent
+      curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    #+END_SRC
+
+    Add repository
+    *Note:* on Deepin 15.4.1, the `$(lsb_release -cs)` returns `unstable`
+            open `/etc/apt/sources.list` and change for `xenial`
+    #+BEGIN_SRC sh :tangle no :dir /sudo:: :results output silent
+      add-apt-repository \
+           "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+            $(lsb_release -cs) \
+            stable"
+      apt update
+    #+END_SRC
+
+    And finally Installing
+    #+BEGIN_SRC sh :dir /sudo:: :results output silent
+      apt install docker-ce
+    #+END_SRC
+
+    To run `docker` without =sudo= on current user
+    #+BEGIN_SRC sh :dir /sudo::
+      usermod -aG docker $USER
+    #+END_SRC
+
+
+** Creating the =Workspace= folder
+
+   #+BEGIN_SRC sh
+    mkdir -p /home/rzani/Workspace/webserver
+   #+END_SRC
+
+** Cloning and open .env file
+
+   #+BEGIN_SRC sh :dir /home/rzani/Workspace/webserver
+    git clone https://github.com/Laradock/laradock.git
+    cd laradock
+    cp env-example .env
+    emacs .env
+   #+END_SRC
+
+
+* Up with nginx, mysql e redis
+
+  #+BEGIN_SRC sh :results output silent :dir /home/rzani/Workspace/webserver/laradock
+    docker-compose up -d nginx mysql redis
+  #+END_SRC
+
+
+* Stop
+
+  #+BEGIN_SRC sh :results output silent :dir /home/rzani/Workspace/webserver/laradock
+    docker-compose stop
+  #+END_SRC
+
+
+* Restart
+
+  #+BEGIN_SRC sh :results output silent :dir /home/rzani/Workspace/webserver/laradock
+    docker-compose restart nginx mysql redis
+  #+END_SRC
