@@ -8,6 +8,9 @@
 
 ;;; Code:
 
+(require 'ob)          ;; org-mode export system
+(require 'ob-tangle)   ;; org-mode tangling process
+
 ;; Check Emacs version
 (let ((minver "23.3"))
   (when (version<= emacs-version "23.1")
@@ -33,6 +36,12 @@
 
 ;; Load custom file
 (load custom-file 'noerror)
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((sh . t)
+   (python . t)
+   (perl . t)))
 
 ;; Load init.el.org and evaluate
 (org-babel-load-file (expand-file-name "~/.emacs.d/init.el.org"))

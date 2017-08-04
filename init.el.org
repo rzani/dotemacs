@@ -1,7 +1,7 @@
 #+STARTUP: content
 * init.el
 ** Interface and tweaks
-   Always answer y or n
+   Always answer y or n, does anyone type =yes= anymore?
    #+BEGIN_SRC emacs-lisp
      (fset 'yes-or-no-p 'y-or-n-p)
    #+END_SRC
@@ -52,6 +52,14 @@
 		      "%b"))))
    #+END_SRC
 
+   Undo tree
+   M-x undo-tree-visualize or <kbd>C-x u</kbd>
+   #+BEGIN_SRC emacs-lisp
+     (use-package undo-tree
+       :diminish undo-tree-mode
+       :init (global-undo-tree-mode))
+   #+END_SRC
+
    Setup backup's file folder
    #+BEGIN_SRC emacs-lisp
      (defvar backup-dir "~/.emacs.d/backups/")
@@ -63,6 +71,31 @@
    #+BEGIN_SRC emacs-lisp
      ;; (custom-set-variables
      ;;  '(initial-frame-alist (quote ((fullscreen . maximized)))))
+   #+END_SRC
+
+   Let’s increase the cache before starting garbage collection:
+   #+BEGIN_SRC emacs-lisp
+     (setq gc-cons-threshold 50000000)
+   #+END_SRC
+
+   How to remove the warnings from the GnuTLS library when using HTTPS… increase the minimum prime bits size:
+   #+BEGIN_SRC emacs-lisp
+     (setq gnutls-min-prime-bits 4096)
+   #+END_SRC
+
+   Turn on Ctrl+c and Ctrl+v
+   #+BEGIN_SRC emacs-lisp
+     (cua-mode 1)
+   #+END_SRC
+
+   Make tab key do indent first then completion.
+   #+BEGIN_SRC emacs-lisp
+     (setq-default tab-always-indent 'complete)
+   #+END_SRC
+
+   #+BEGIN_SRC emacs-lisp
+     (setq scroll-conservatively 10000
+           scroll-preserve-screen-position t)
    #+END_SRC
 
 ** Custom file
@@ -96,7 +129,9 @@
    #+END_SRC
 
 ** Evil
+
    Extensible VI Layer
+
    #+BEGIN_SRC emacs-lisp
      (use-package evil
        :ensure t
@@ -124,7 +159,9 @@
    #+END_SRC
 
 *** Evil Escape
+
     Escape with jk keys
+
     #+BEGIN_SRC emacs-lisp
       (use-package evil-escape
         :ensure t
@@ -136,7 +173,27 @@
     #+END_SRC
 
 *** Evil Surround
+
     Surrounding: parentheses, brackets, quotes, XML tags, and more.
+
+    | Visual Mode    |
+    |----------------|
+    | S<textobject>  |
+    | gS<textobject> |
+
+    | Normal Mode    |
+    |----------------|
+    | ys<textobject> |
+    | yS<textobject> |
+
+    | Change       |
+    |--------------|
+    | cs<old><new> |
+
+    | Delete         |
+    |----------------|
+    | ds<textobject> |
+
     #+BEGIN_SRC emacs-lisp
       (use-package evil-surround
         :ensure t
@@ -145,7 +202,9 @@
     #+END_SRC
 
 *** Evil Matchit
+
     Press "%" to jump between matched tags
+
     #+BEGIN_SRC emacs-lisp
       (use-package evil-matchit
         :ensure t
@@ -154,7 +213,9 @@
     #+END_SRC
 
 *** Evil MC
+
     Multi cursors editing
+
     #+BEGIN_SRC emacs-lisp
       ;; C-n (evil-mc-make-and-goto-next-match)
       ;; C-p (evil-mc-make-and-goto-prev-match)
@@ -167,14 +228,18 @@
     #+END_SRC
 
 *** Evil Nerd Commenter
+
     Comment lines easier
+
     #+BEGIN_SRC emacs-lisp
       (use-package evil-nerd-commenter
         :ensure t)
     #+END_SRC
 
 *** Evil Leader
+
     Vim leader key ported
+
     #+BEGIN_SRC emacs-lisp
       (use-package evil-leader
         :ensure t
@@ -195,6 +260,7 @@
           "b"   'buffer-menu
           "e"   'counsel-find-file
           "f"   'ag-project
+          "i"   'counsel-imenu
           "ci"  'evilnc-comment-or-uncomment-lines
           "p"   'insert-register
           "q"   'kill-this-buffer
@@ -237,8 +303,20 @@
 ** IDO
    Set up IDO everywhere
    #+BEGIN_SRC emacs-lisp
-     (setq ido-everywhere t)
+     (setq ido-enable-flex-matching t
+           ido-ignore-extensions t
+           ido-use-virtual-buffers t
+           ido-everywhere t)
      (ido-mode 1)
+   #+END_SRC
+
+   Add to IDO [[https://github.com/lewang/flx][flx]] package (fuzzy match)
+   #+BEGIN_SRC emacs-lisp
+     (use-package flx-ido
+       :ensure t
+       :init (setq ido-enable-flex-matching t
+                   ido-use-faces nil)
+       :config (flx-ido-mode 1))
    #+END_SRC
 
 ** Swiper
@@ -254,16 +332,11 @@
        :ensure t)
    #+END_SRC
 
-   [[https://github.com/lewang/flx][flx]] - fuzzy match
-   #+BEGIN_SRC emacs-lisp
-     (use-package flx
-       :ensure t)
-   #+END_SRC
-
    [[https://github.com/abo-abo/swiper][swiper]]
    #+BEGIN_SRC emacs-lisp
      (use-package swiper
        :ensure t
+       :diminish ivy-mode
        :bind (("C-s" . swiper)
               ("M-x" . counsel-M-x)
               ("C-c C-f" . counsel-find-file))
@@ -304,6 +377,10 @@
 
 ** AG
    [[https://github.com/ggreer/the_silver_searcher][Silver Search]]
+   #+BEGIN_SRC sh :tangle no :dir /sudo:: :results output silent
+       sudo apt install silversearcher-ag
+   #+END_SRC
+
    #+BEGIN_SRC emacs-lisp
      (use-package ag
        :ensure t
@@ -354,6 +431,7 @@
    #+BEGIN_SRC emacs-lisp
      (use-package emmet-mode
        :ensure t
+       :diminish emmet-mode
        :config
        (add-hook 'sgml-mode-hook 'emmet-mode)
        (add-hook 'css-mode-hook 'emmet-mode)
@@ -369,23 +447,6 @@
        :config (global-flycheck-mode))
    #+END_SRC
 
-** EditorConfig
-   Define and maintain consistent coding styles
-   #+BEGIN_SRC emacs-lisp
-     (use-package editorconfig
-       :ensure t
-       :diminish (editorconfig-mode . "")
-       :config (editorconfig-mode 1))
-   #+END_SRC
-
-** Yasnippet
-   Template system
-   #+BEGIN_SRC emacs-lisp
-     (use-package yasnippet
-       :ensure t
-       :config (yas-global-mode 1))
-   #+END_SRC
-
 ** Org
    UTF-8 bullets
    #+BEGIN_SRC emacs-lisp
@@ -395,34 +456,110 @@
        (add-hook 'org-mode-hook '(lambda() (org-bullets-mode))))
    #+END_SRC
 
-** Languages
+** Programming Languages
+*** General Language Support
+**** EditorConfig
+
+     Define and maintain consistent coding styles
+     #+BEGIN_SRC emacs-lisp
+       (use-package editorconfig
+         :ensure t
+         :diminish (editorconfig-mode . "")
+         :config (editorconfig-mode 1))
+     #+END_SRC
+
+**** Yasnippet
+
+   Template system
+   #+BEGIN_SRC emacs-lisp
+     (use-package yasnippet
+       :ensure t
+       :diminish yas-minor-mode
+       :config (yas-global-mode 1))
+   #+END_SRC
+
+**** Tag support
+
+    Install on Ubuntu
+   #+BEGIN_SRC sh :tangle no :dir /sudo:: :results output silent
+      sudo apt-get install -y exuberant-ctags
+    #+END_SRC
+
+    *Note:* For every project, run the following command:
+    #+BEGIN_SRC sh :tangle no
+      ctags -R .
+    #+END_SRC
+
+**** Red Warnings
+
+     It turns red some important words in comments
+     #+BEGIN_SRC emacs-lisp
+       (add-hook 'prog-mode-hook
+                 (lambda ()
+                   (font-lock-add-keywords nil
+                                           '(("\\<\\(FIX\\|FIXME\\|TODO\\|BUG\\|HACK\\):" 1 font-lock-warning-face t)))))
+     #+END_SRC
+
+**** Auto complete
+
+     Install company-mode
+     #+BEGIN_SRC emacs-lisp
+       (use-package company
+         :ensure t
+         :diminish company-mode
+         :bind(("M-n" . company-complete))
+         :config
+         (global-company-mode))
+     #+END_SRC
+
 *** PHP
+    Dependencies
+    #+BEGIN_SRC sh :dir /sudo:: :results output silent :tangle no
+      apt install -y php-cli cscope
+    #+END_SRC
+
     Install php-mode
     #+BEGIN_SRC emacs-lisp
       (use-package php-mode
-      :ensure t
-      :config
-      ;; Automatically delete trailing whitespace on save
-      (add-to-list 'write-file-functions 'delete-trailing-whitespace)
+        :ensure t
+        :config
 
-      ;; make these variables local
-      (make-local-variable 'web-mode-code-indent-offset)
-      (make-local-variable 'web-mode-markup-indent-offset)
-      (make-local-variable 'web-mode-css-indent-offset)
+        ;; Automatically delete trailing whitespace on save
+        (add-to-list 'write-file-functions 'delete-trailing-whitespace)
 
-      ;; set indentation, can set different indentation level for different code type
-      (setq web-mode-code-indent-offset 4)
-      (setq web-mode-css-indent-offset 2)
-      (setq web-mode-markup-indent-offset 2))
+        ;; make these variables local
+        (make-local-variable 'web-mode-code-indent-offset)
+        (make-local-variable 'web-mode-markup-indent-offset)
+        (make-local-variable 'web-mode-css-indent-offset)
+
+        ;; set indentation, can set different indentation level for different code type
+        (setq web-mode-code-indent-offset 4)
+        (setq web-mode-css-indent-offset 2)
+        (setq web-mode-markup-indent-offset 2))
     #+END_SRC
 
-    Minor modes
+    Snippets to common php functions
+    #+BEGIN_SRC emacs-lisp
+      (use-package php-auto-yasnippets
+        :bind(("C-c C-j" . yas/create-php-snippet))
+        :ensure t)
+    #+END_SRC
+
+    Minor modes for php-mode-hook
     #+BEGIN_SRC emacs-lisp
       (defun rzani/php-mode-hook()
         "Configures php-mode"
 
+        (require 'php-auto-yasnippets)
+
         ;; Pair brackets
-        (electric-pair-mode 1))
+        (electric-pair-mode 1)
+
+        ;; Auto complete backend
+        (set (make-local-variable 'company-backends)
+             '((php-extras-company company-dabbrev) company-capf company-files)))
+
+
       (add-hook 'php-mode-hook 'rzani/php-mode-hook)
     #+END_SRC
 
@@ -575,3 +712,10 @@
      (load-theme 'sanityinc-solarized-light t)
      ;; (load-theme 'atom-one-dark t)
    #+END_SRC
+
+
+#+BEGIN_SRC shell
+
+echo "teste"
+
+#+END_SRC
