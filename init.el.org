@@ -486,18 +486,6 @@
        :config (yas-global-mode 1))
    #+END_SRC
 
-**** Tag support
-
-    Install on Ubuntu
-   #+BEGIN_SRC sh :tangle no :dir /sudo:: :results output silent
-      sudo apt-get install -y exuberant-ctags
-    #+END_SRC
-
-    *Note:* For every project, run the following command:
-    #+BEGIN_SRC sh :tangle no
-      ctags -R .
-    #+END_SRC
-
 **** Red Warnings
 
      It turns red some important words in comments
