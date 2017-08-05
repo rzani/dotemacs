@@ -67,8 +67,12 @@
      (setq make-backup-files nil)
    #+END_SRC
 
-   Start in fullscreen mode
+   Resize initial frame size
    #+BEGIN_SRC emacs-lisp
+     (setq initial-frame-alist
+           '((width . 102) (height . 54)))
+
+     ;; To start in fullscren
      ;; (custom-set-variables
      ;;  '(initial-frame-alist (quote ((fullscreen . maximized)))))
    #+END_SRC
@@ -181,14 +185,17 @@
     | S<textobject>  |
     | gS<textobject> |
 
+
     | Normal Mode    |
     |----------------|
     | ys<textobject> |
     | yS<textobject> |
 
+
     | Change       |
     |--------------|
     | cs<old><new> |
+
 
     | Delete         |
     |----------------|
