@@ -8,7 +8,7 @@
 
    Set cursor line mode globally
    #+BEGIN_SRC emacs-lisp
-     (global-hl-line-mode)
+     ;; (global-hl-line-mode)
    #+END_SRC
 
    Hide scroll bar
@@ -283,15 +283,16 @@
      (use-package telephone-line
        :ensure t
        :init
-       (setq telephone-line-primary-left-separator 'telephone-line-identity-left
-             telephone-line-secondary-left-separator 'telephone-line-identity-hollow-left
-             telephone-line-primary-right-separator 'telephone-line-identity-right
-             telephone-line-secondary-right-separator 'telephone-line-identity-hollow-right)
+       (setq telephone-line-primary-left-separator 'telephone-line-halfsin-left
+             telephone-line-secondary-left-separator 'telephone-line-halfsin-hollow-left
+             telephone-line-primary-right-separator 'telephone-line-halfsin-right
+             telephone-line-secondary-right-separator 'telephone-line-halfsin-hollow-right)
        (setq telephone-line-height 24
              telephone-line-evil-use-short-tag t)
        :config
        (telephone-line-evil-config))
    #+END_SRC
+
 
    Install mode-icons
    #+BEGIN_SRC emacs-lisp
@@ -495,9 +496,9 @@
      It turns red some important words in comments
      #+BEGIN_SRC emacs-lisp
        (add-hook 'prog-mode-hook
-                 (lambda ()
-                   (font-lock-add-keywords nil
-                                           '(("\\<\\(FIX\\|FIXME\\|TODO\\|BUG\\|HACK\\):" 1 font-lock-warning-face t)))))
+           (lambda ()
+             (font-lock-add-keywords nil
+                 '(("\\<\\(FIX\\|FIXME\\|TODO\\|BUG\\|HACK\\):" 1 font-lock-warning-face t)) )))
      #+END_SRC
 
 **** Auto complete
@@ -518,6 +519,28 @@
       apt install -y php-cli cscope
     #+END_SRC
 
+    Install PHP company backend
+    #+BEGIN_SRC emacs-lisp
+      (use-package company-php
+        :ensure t)
+    #+END_SRC
+
+    Minor modes for php-mode-hook
+    #+BEGIN_SRC emacs-lisp
+      (defun rzani/php-mode-hook()
+        "Configures php-mode"
+
+        (require 'php-auto-yasnippets)
+
+        ;; Pair brackets
+        (electric-pair-mode 1)
+
+        ;; Company backend
+        (with-eval-after-load 'company
+          (add-to-list 'company-backends 'company-ac-php-backend))
+        )
+    #+END_SRC
+
     Install php-mode
     #+BEGIN_SRC emacs-lisp
       (use-package php-mode
@@ -535,32 +558,10 @@
         ;; set indentation, can set different indentation level for different code type
         (setq web-mode-code-indent-offset 4)
         (setq web-mode-css-indent-offset 2)
-        (setq web-mode-markup-indent-offset 2))
-    #+END_SRC
+        (setq web-mode-markup-indent-offset 2)
 
-    Snippets to common php functions
-    #+BEGIN_SRC emacs-lisp
-      (use-package php-auto-yasnippets
-        :bind(("C-c C-j" . yas/create-php-snippet))
-        :ensure t)
-    #+END_SRC
-
-    Minor modes for php-mode-hook
-    #+BEGIN_SRC emacs-lisp
-      (defun rzani/php-mode-hook()
-        "Configures php-mode"
-
-        (require 'php-auto-yasnippets)
-
-        ;; Pair brackets
-        (electric-pair-mode 1)
-
-        ;; Auto complete backend
-        (set (make-local-variable 'company-backends)
-             '((php-extras-company company-dabbrev) company-capf company-files)))
-
-
-      (add-hook 'php-mode-hook 'rzani/php-mode-hook)
+        (add-hook 'php-mode-hook 'rzani/php-mode-hook)
+        )
     #+END_SRC
 
 *** JS
@@ -592,11 +593,8 @@
         :config
         (setq web-mode-engines-alist
               '( ("blade"  . "\\.blade\\.")))
+      )
 
-        (setq web-mode-ac-sources-alist
-              '(("php" . (ac-source-php-extras ac-source-yasnippet ac-source-gtags ac-source-abbrev ac-source-dictionary ac-source-wordsin-same-mode-buffers))
-                ("html" . (ac-source-emmet-html-aliases ac-source-emmet-html-snippets))
-                ("css" . (ac-source-css-property ac-source-abbrev ac-source-dictionary ac-source-words-in-same-mode-buffers)))))
     #+END_SRC
 
     Minor modes
@@ -707,15 +705,15 @@
       :ensure t)
    #+END_SRC
 
+   Install
+   #+BEGIN_SRC emacs-lisp
+     ;; (use-package flatui-theme
+     ;;   :ensure t)
+   #+END_SRC
+
    Load Theme
    #+BEGIN_SRC emacs-lisp
+     ;; (load-theme 'flatui t)
      (load-theme 'sanityinc-solarized-light t)
      ;; (load-theme 'atom-one-dark t)
    #+END_SRC
-
-
-#+BEGIN_SRC shell
-
-echo "teste"
-
-#+END_SRC
