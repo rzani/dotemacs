@@ -8,3 +8,6 @@ init.el.el
 smex-items
 tramp
 tags
+.org-id-locations
+eshell
+ltxpng
