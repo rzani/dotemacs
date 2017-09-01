@@ -40,6 +40,7 @@
  'org-babel-load-languages
  '((sh . t)
    (python . t)
+   (latex . t)
    (perl . t)))
 
 ;; Load init.el.org and evaluate
