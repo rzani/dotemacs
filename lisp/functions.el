@@ -80,6 +80,13 @@
     (end-of-line)
     (if (not (= (preceding-char) 44)) (progn (insert ",") (evil-normal-state)))))
 
+(defun rzani/add-bracket-end-of-line()
+  "Add curly brackets at the end of line and return to current position"
+  (interactive)
+  (save-excursion
+    (end-of-line)
+    (if (not (= (preceding-char) 123)) (progn (insert " {") (evil-normal-state)))))
+
 (defun rzani/insert-single-arrow ()
   "Inserts -> at current cursor position"
   (interactive)

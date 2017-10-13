@@ -8,7 +8,7 @@
 
    Set cursor line mode globally
    #+BEGIN_SRC emacs-lisp
-     (global-hl-line-mode)
+     ;; (global-hl-line-mode)
    #+END_SRC
 
    Hide scroll bar
@@ -446,6 +446,14 @@
       :ensure t)
    #+END_SRC
 
+** Eighty Rule
+   #+BEGIN_SRC emacs-lisp
+     (use-package fill-column-indicator
+       :ensure t
+       :config
+       (setq fci-rule-column 80))
+   #+END_SRC
+
 ** Emmet
    Greatly improves HTML & CSS workflow
    #+BEGIN_SRC emacs-lisp
@@ -648,6 +656,9 @@
         ;; Pair brackets
         (electric-pair-mode 1)
 
+        ;; eighty column
+        (fci-mode 1)
+
         ;; Company backend(auto-complete)
         (when (boundp 'company-backends)
           (setq-local company-backends
@@ -827,11 +838,23 @@
    #+BEGIN_SRC emacs-lisp
      (global-set-key (kbd "C-,") 'rzani/add-comma-end-of-line)
      (global-set-key (kbd "C-;") 'rzani/add-semicolon-end-of-line)
+     (global-set-key (kbd "C-{") 'rzani/add-bracket-end-of-line)
    #+END_SRC
 
    Indent all buffer
    #+BEGIN_SRC emacs-lisp
      (global-set-key (kbd "C-c i") 'indent-buffer)
+   #+END_SRC
+
+   It lets you move point from window to window using Shift and the arrow keys
+   #+BEGIN_SRC emacs-lisp
+     (when (fboundp 'windmove-default-keybindings)
+       (windmove-default-keybindings 'meta))
+
+     (global-set-key (kbd "M-h ")  'windmove-left)
+     (global-set-key (kbd "M-l") 'windmove-right)
+     (global-set-key (kbd "M-k")    'windmove-up)
+     (global-set-key (kbd "M-j")  'windmove-down)
    #+END_SRC
 
 ** Themes
