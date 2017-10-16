@@ -8,7 +8,7 @@
 
    Set cursor line mode globally
    #+BEGIN_SRC emacs-lisp
-     ;; (global-hl-line-mode)
+     (global-hl-line-mode)
    #+END_SRC
 
    Hide scroll bar
@@ -420,7 +420,7 @@
        :config
        (linum-mode)
        (custom-set-faces
-        '(linum-relative-current-face ((t (:foreground "#fdf6e3" :background "#073642" :weight bold)))))
+        '(linum-relative-current-face ((t (:foreground "#fdf6e3" :weight bold)))))
        (setq linum-relative-current-symbol ""))
    #+END_SRC
 
@@ -872,7 +872,8 @@
 
    Load Theme
    #+BEGIN_SRC emacs-lisp
+     (load-theme 'nova-theme t)
      ;; (load-theme 'flatui t)
-     (load-theme 'sanityinc-solarized-light t)
+     ;; (load-theme 'sanityinc-solarized-light t)
      ;; (load-theme 'atom-one-dark t)
    #+END_SRC
